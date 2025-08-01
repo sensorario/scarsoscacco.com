@@ -35,6 +35,10 @@ function App() {
             height: 400,
           }} />
         </div>
+        <div>
+          <h2>FEN attuale</h2>
+          <pre>{fen}</pre>
+        </div>
       </div>
     </>
   )
