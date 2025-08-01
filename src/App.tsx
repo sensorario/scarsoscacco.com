@@ -4,6 +4,33 @@ import { Chess, type Square } from 'chess.js'
 import { useState, useEffect, useRef } from "react"
 
 function App() {
+  const [language, setLanguage] = useState<'it' | 'en'>('it')
+  
+  const pieceNames = {
+    it: {
+      p: 'pedone',
+      n: 'cavallo',
+      b: 'alfiere',
+      r: 'torre',
+      q: 'donna',
+      k: 're'
+    },
+    en: {
+      p: 'pawn',
+      n: 'knight',
+      b: 'bishop',
+      r: 'rook',
+      q: 'queen',
+      k: 'king'
+    }
+  }
+
+  const getPieceName = (piece: string) => {
+    const [color, type] = piece.split('')
+    const colorName = color === 'w' ? (language === 'it' ? 'Bianco' : 'White') : (language === 'it' ? 'Nero' : 'Black')
+    return `${colorName} ${pieceNames[language][type.toLowerCase()]}`
+  }
+
   const [game] = useState(new Chess())
   const [viewGame, setViewGame] = useState(new Chess())
   const [fen, setFen] = useState(game.fen())
@@ -130,6 +157,41 @@ function App() {
     setFen(tempGame.fen())
   }
 
+  const moveTranslations = {
+    it: {
+      'K': 'R',
+      'Q': 'D',
+      'R': 'T',
+      'B': 'A',
+      'N': 'C',
+      'x': 'x',
+      '+': '+',
+      '#': '#',
+      'O-O': 'O-O',
+      'O-O-O': 'O-O-O'
+    },
+    en: {
+      'K': 'K',
+      'Q': 'Q',
+      'R': 'R',
+      'B': 'B',
+      'N': 'N',
+      'x': 'x',
+      '+': '+',
+      '#': '#',
+      'O-O': 'O-O',
+      'O-O-O': 'O-O-O'
+    }
+  }
+
+  const translateMove = (move: string) => {
+    if (language === 'en') return move
+    
+    return move.split('').map(char => {
+      return moveTranslations.it[char] || char
+    }).join('')
+  }
+
   return (
     <>
       <div style={{
@@ -139,6 +201,35 @@ function App() {
         padding: '20px',
       }}>
         <div>
+          <div style={{ marginBottom: '20px' }}>
+            <button
+              onClick={() => setLanguage('it')}
+              style={{
+                padding: '8px 16px',
+                borderRadius: '4px',
+                border: '1px solid #666',
+                backgroundColor: language === 'it' ? 'white' : '#4a5568',
+                color: language === 'it' ? '#1a202c' : 'white',
+                marginRight: '8px',
+                cursor: 'pointer'
+              }}
+            >
+              Italiano
+            </button>
+            <button
+              onClick={() => setLanguage('en')}
+              style={{
+                padding: '8px 16px',
+                borderRadius: '4px',
+                border: '1px solid #666',
+                backgroundColor: language === 'en' ? 'white' : '#4a5568',
+                color: language === 'en' ? '#1a202c' : 'white',
+                cursor: 'pointer'
+              }}
+            >
+              English
+            </button>
+          </div>
           <h1>Scacchiera</h1>
           <div className="chessboard-container">
             <Chessboard options={{
@@ -183,12 +274,12 @@ function App() {
                     cursor: 'pointer',
                     border: '1px solid #666',
                     borderRadius: '4px',
-                    backgroundColor: currentMoveIndex === index ? '#4a5568' : 'white',
-                    color: currentMoveIndex === index ? 'white' : '#1a202c',
+                    backgroundColor: currentMoveIndex === index ? 'white' : '#4a5568',
+                    color: currentMoveIndex === index ? '#1a202c' : 'white',
                     fontWeight: currentMoveIndex === index ? 'bold' : 'normal'
                   }}
                 >
-                  {index % 2 === 0 ? `${Math.floor(index/2 + 1)}.` : ''} {move}
+                  {index % 2 === 0 ? `${Math.floor(index/2 + 1)}.` : ''} {translateMove(move)}
                 </button>
               ))}
             </div>
