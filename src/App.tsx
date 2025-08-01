@@ -27,10 +27,14 @@ function App() {
     <>
       <div>
         <h1>Scacchiera</h1>
-        <Chessboard options={{
-          position: fen,
-          onPieceDrop: onPieceDrop
-        }} />
+        <div className="chessboard-container">
+          <Chessboard options={{
+            position: fen,
+            onPieceDrop: onPieceDrop,
+            widtrh: 400,
+            height: 400,
+          }} />
+        </div>
       </div>
     </>
   )
