@@ -1,6 +1,6 @@
 import './App.css'
 import { Chessboard } from 'react-chessboard'
-import { Chess } from 'chess.js'
+import { Chess, type Square } from 'chess.js'
 import { useState, useEffect, useRef } from "react"
 
 function App() {
@@ -97,12 +97,15 @@ function App() {
           <h1>Scacchiera</h1>
           <div className="chessboard-container">
             <Chessboard options={{
+              arrows: bestMove ? [{
+                startSquare: bestMove.substring(0, 2) as Square,
+                endSquare: bestMove.substring(2, 4) as Square,
+                color: 'rgb(0, 128, 0)'
+              }] : undefined,
               position: fen,
               onPieceDrop: onPieceDrop,
               width: 400,
               height: 400,
-              arePremovesAllowed: true,
-              customArrows: bestMove ? [[bestMove.substring(0, 2), bestMove.substring(2, 4)]] : []
             }} />
           </div>
         </div>
