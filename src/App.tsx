@@ -8,6 +8,7 @@ function App() {
   const [fen, setFen] = useState(game.fen())
   const [evaluation, setEvaluation] = useState<string>('')
   const [bestMove, setBestMove] = useState<string>('')
+  const [isThinking, setIsThinking] = useState(false)
   const engineRef = useRef<Worker | null>(null)
 
   useEffect(() => {
@@ -50,8 +51,17 @@ function App() {
     return () => engineRef.current?.terminate()
   }, [])
 
+  // Analizza la posizione iniziale
+  useEffect(() => {
+    if (!isThinking) {
+      analyzePosition()
+    }
+  }, [fen])
+
   const analyzePosition = () => {
     if (!engineRef.current) return
+    setIsThinking(true)
+    setBestMove('')
     engineRef.current.postMessage('stop')
     engineRef.current.postMessage('setoption name MultiPV value 1')
     engineRef.current.postMessage('position fen ' + fen)
@@ -69,8 +79,7 @@ function App() {
     const move = game.move({ from: sourceSquare, to: targetSquare, promotion: 'q' })
     if (move) {
       setFen(game.fen())
-      // Analizza la nuova posizione
-      setTimeout(analyzePosition, 100)
+      setIsThinking(false)
       return true
     }
     return false
@@ -92,6 +101,8 @@ function App() {
               onPieceDrop: onPieceDrop,
               width: 400,
               height: 400,
+              arePremovesAllowed: true,
+              customArrows: bestMove ? [[bestMove.substring(0, 2), bestMove.substring(2, 4)]] : []
             }} />
           </div>
         </div>
