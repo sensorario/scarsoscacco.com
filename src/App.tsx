@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react"
 
 function App() {
   const [game] = useState(new Chess())
+  const [viewGame, setViewGame] = useState(new Chess())
   const [fen, setFen] = useState(game.fen())
   const [evaluation, setEvaluation] = useState<string>('')
   const [bestMove, setBestMove] = useState<string>('')
@@ -85,6 +86,18 @@ function App() {
     return false
   }
 
+  const onMoveClick = (moveIndex: number) => {
+    const moves = game.history()
+    const tempGame = new Chess()
+    
+    // Riproduci le mosse fino all'indice selezionato
+    for (let i = 0; i <= moveIndex; i++) {
+      tempGame.move(moves[i])
+    }
+    
+    setFen(tempGame.fen())
+  }
+
   return (
     <>
       <div style={{
@@ -128,7 +141,22 @@ function App() {
           </div>
           <div>
             <h2>PGN attuale</h2>
-            <pre style={{ wordWrap: 'break-word' }}>{game.pgn()}</pre>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+              {game.history().map((move, index) => (
+                <button 
+                  key={index}
+                  onClick={() => onMoveClick(index)}
+                  style={{ 
+                    padding: '4px 8px',
+                    cursor: 'pointer',
+                    border: '1px solid #ccc',
+                    borderRadius: '4px'
+                  }}
+                >
+                  {index % 2 === 0 ? `${Math.floor(index/2 + 1)}.` : ''} {move}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
