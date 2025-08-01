@@ -1,12 +1,36 @@
 import './App.css'
 import { Chessboard } from 'react-chessboard'
+import { Chess } from 'chess.js'
+import React, { useState } from 'react'
 
 function App() {
+  const [game] = useState(new Chess())
+  const [fen, setFen] = useState(game.fen())
+
+  const onPieceDrop = ({
+    sourceSquare,
+    targetSquare,
+  }: {
+    piece: string;
+    sourceSquare: string;
+    targetSquare: string;
+  }) => {
+    const move = game.move({ from: sourceSquare, to: targetSquare, promotion: 'q' })
+    if (move) {
+      setFen(game.fen())
+      return true
+    }
+    return false
+  }
+
   return (
     <>
       <div>
         <h1>Scacchiera</h1>
-        <Chessboard />
+        <Chessboard options={{
+          position: fen,
+          onPieceDrop: onPieceDrop
+        }} />
       </div>
     </>
   )
