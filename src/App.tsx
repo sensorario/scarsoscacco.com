@@ -39,6 +39,10 @@ function App() {
           <h2>FEN attuale</h2>
           <pre>{fen}</pre>
         </div>
+        <div>
+          <h2>PGN attuale</h2>
+          <pre>{game.pgn()}</pre>
+        </div>
       </div>
     </>
   )
