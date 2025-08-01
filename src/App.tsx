@@ -106,6 +106,11 @@ function App() {
           onMoveClick(newIndex)
         }
       }
+      if (e.key === 'Backspace') {
+        game.undo()
+        setFen(game.fen())
+        setCurrentMoveIndex(moves.length - 2)
+      }
     }
 
     window.addEventListener('keydown', handleKeyDown)
