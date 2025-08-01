@@ -7,13 +7,14 @@ function App() {
   const [game] = useState(new Chess())
   const [fen, setFen] = useState(game.fen())
   const [evaluation, setEvaluation] = useState<string>('')
+  const [bestMove, setBestMove] = useState<string>('')
   const engineRef = useRef<Worker | null>(null)
 
   useEffect(() => {
     engineRef.current = new Worker('/stockfish/stockfish.js')
 
     engineRef.current.onmessage = (e) => {
-      console.log('Stockfish message:', e.data) // debug dettagliato
+      console.log('Stockfish message:', e.data)
       if (typeof e.data === 'string') {
         if (e.data === 'uciok') {
           console.log('UCI OK ricevuto')
@@ -28,6 +29,12 @@ function App() {
           if (match) {
             const score = parseInt(match[1]) / 100
             setEvaluation(score > 0 ? `+${score}` : score.toString())
+          }
+        }
+        if (e.data.startsWith('bestmove')) {
+          const move = e.data.split(' ')[1]
+          if (move) {
+            setBestMove(move)
           }
         }
       }
@@ -96,6 +103,10 @@ function App() {
           <div>
             <h2>Valutazione</h2>
             <pre>{evaluation || 'In analisi...'}</pre>
+          </div>
+          <div>
+            <h2>Mossa migliore</h2>
+            <pre>{bestMove || 'In analisi...'}</pre>
           </div>
           <div>
             <h2>FEN attuale</h2>
