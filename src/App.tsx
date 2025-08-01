@@ -1,11 +1,55 @@
 import './App.css'
 import { Chessboard } from 'react-chessboard'
 import { Chess } from 'chess.js'
-import React, { useState } from 'react'
+import { useState, useEffect, useRef } from "react"
 
 function App() {
   const [game] = useState(new Chess())
   const [fen, setFen] = useState(game.fen())
+  const [evaluation, setEvaluation] = useState<string>('')
+  const engineRef = useRef<Worker | null>(null)
+
+  useEffect(() => {
+    engineRef.current = new Worker('/stockfish/stockfish.js')
+
+    engineRef.current.onmessage = (e) => {
+      console.log('Stockfish message:', e.data) // debug dettagliato
+      if (typeof e.data === 'string') {
+        if (e.data === 'uciok') {
+          console.log('UCI OK ricevuto')
+          engineRef.current?.postMessage('isready')
+        }
+        if (e.data === 'readyok') {
+          console.log('READY OK ricevuto')
+          analyzePosition()
+        }
+        if (e.data.includes('score cp')) {
+          const match = e.data.match(/score cp ([-\d]+)/)
+          if (match) {
+            const score = parseInt(match[1]) / 100
+            setEvaluation(score > 0 ? `+${score}` : score.toString())
+          }
+        }
+      }
+    }
+
+    engineRef.current.onerror = (e) => {
+      console.error('Errore Stockfish:', e)
+    }
+
+    console.log('Invio comando UCI')
+    engineRef.current.postMessage('uci')
+
+    return () => engineRef.current?.terminate()
+  }, [])
+
+  const analyzePosition = () => {
+    if (!engineRef.current) return
+    engineRef.current.postMessage('stop')
+    engineRef.current.postMessage('setoption name MultiPV value 1')
+    engineRef.current.postMessage('position fen ' + fen)
+    engineRef.current.postMessage('go depth 15')
+  }
 
   const onPieceDrop = ({
     sourceSquare,
@@ -18,6 +62,8 @@ function App() {
     const move = game.move({ from: sourceSquare, to: targetSquare, promotion: 'q' })
     if (move) {
       setFen(game.fen())
+      // Analizza la nuova posizione
+      setTimeout(analyzePosition, 100)
       return true
     }
     return false
@@ -25,23 +71,40 @@ function App() {
 
   return (
     <>
-      <div>
-        <h1>Scacchiera</h1>
-        <div className="chessboard-container">
-          <Chessboard options={{
-            position: fen,
-            onPieceDrop: onPieceDrop,
-            widtrh: 400,
-            height: 400,
-          }} />
-        </div>
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: '20px',
+        padding: '20px',
+      }}>
         <div>
-          <h2>FEN attuale</h2>
-          <pre>{fen}</pre>
+          <h1>Scacchiera</h1>
+          <div className="chessboard-container">
+            <Chessboard options={{
+              position: fen,
+              onPieceDrop: onPieceDrop,
+              width: 400,
+              height: 400,
+            }} />
+          </div>
         </div>
-        <div>
-          <h2>PGN attuale</h2>
-          <pre>{game.pgn()}</pre>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '20px',
+        }}>
+          <div>
+            <h2>Valutazione</h2>
+            <pre>{evaluation || 'In analisi...'}</pre>
+          </div>
+          <div>
+            <h2>FEN attuale</h2>
+            <pre style={{ wordWrap: 'break-word' }}>{fen}</pre>
+          </div>
+          <div>
+            <h2>PGN attuale</h2>
+            <pre style={{ wordWrap: 'break-word' }}>{game.pgn()}</pre>
+          </div>
         </div>
       </div>
     </>
