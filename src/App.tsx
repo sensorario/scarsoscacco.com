@@ -5,7 +5,8 @@ import { useState, useEffect, useRef } from "react"
 
 function App() {
   const [language, setLanguage] = useState<'it' | 'en'>('it')
-  
+  const [boardOrientation, setBoardOrientation] = useState<'white' | 'black'>('white')
+
   const pieceNames = {
     it: {
       p: 'pedone',
@@ -150,12 +151,12 @@ function App() {
   const onMoveClick = (moveIndex: number) => {
     const moves = game.history()
     const tempGame = new Chess()
-    
+
     // Riproduci le mosse fino all'indice selezionato
     for (let i = 0; i <= moveIndex; i++) {
       tempGame.move(moves[i])
     }
-    
+
     setCurrentMoveIndex(moveIndex)
     setFen(tempGame.fen())
   }
@@ -189,7 +190,7 @@ function App() {
 
   const translateMove = (move: string) => {
     if (language === 'en') return move
-    
+
     return move.split('').map(char => {
       return moveTranslations.it[char] || char
     }).join('')
@@ -204,7 +205,7 @@ function App() {
         padding: '20px',
       }}>
         <div>
-          <div style={{ marginBottom: '20px' }}>
+          <div style={{ marginBottom: '20px', display: 'flex', gap: '8px' }}>
             <button
               onClick={() => setLanguage('it')}
               style={{
@@ -232,6 +233,19 @@ function App() {
             >
               English
             </button>
+            <button
+              onClick={() => setBoardOrientation(prev => prev === 'white' ? 'black' : 'white')}
+              style={{
+                padding: '8px 16px',
+                borderRadius: '4px',
+                border: '1px solid #666',
+                backgroundColor: '#4a5568',
+                color: 'white',
+                cursor: 'pointer'
+              }}
+            >
+              Ruota scacchiera
+            </button>
           </div>
           <h1>Scacchiera</h1>
           <div className="chessboard-container">
@@ -245,6 +259,7 @@ function App() {
               onPieceDrop: onPieceDrop,
               width: 400,
               height: 400,
+              boardOrientation: boardOrientation,
             }} />
           </div>
         </div>
@@ -269,10 +284,10 @@ function App() {
             <h2>PGN attuale</h2>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
               {game.history().map((move, index) => (
-                <button 
+                <button
                   key={index}
                   onClick={() => onMoveClick(index)}
-                  style={{ 
+                  style={{
                     padding: '4px 8px',
                     cursor: 'pointer',
                     border: '1px solid #666',
@@ -282,7 +297,7 @@ function App() {
                     fontWeight: currentMoveIndex === index ? 'bold' : 'normal'
                   }}
                 >
-                  {index % 2 === 0 ? `${Math.floor(index/2 + 1)}.` : ''} {translateMove(move)}
+                  {index % 2 === 0 ? `${Math.floor(index / 2 + 1)}.` : ''} {translateMove(move)}
                 </button>
               ))}
             </div>
