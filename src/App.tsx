@@ -181,8 +181,11 @@ function App() {
                   style={{ 
                     padding: '4px 8px',
                     cursor: 'pointer',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px'
+                    border: '1px solid #666',
+                    borderRadius: '4px',
+                    backgroundColor: currentMoveIndex === index ? '#4a5568' : 'white',
+                    color: currentMoveIndex === index ? 'white' : '#1a202c',
+                    fontWeight: currentMoveIndex === index ? 'bold' : 'normal'
                   }}
                 >
                   {index % 2 === 0 ? `${Math.floor(index/2 + 1)}.` : ''} {move}
