@@ -77,8 +77,11 @@ function App() {
     console.log('Invio comando UCI')
     engineRef.current.postMessage('uci')
 
+    // Aggiorna la valutazione quando cambia la posizione
+    analyzePosition()
+
     return () => engineRef.current?.terminate()
-  }, [])
+  }, [fen])
 
   // Analizza la posizione iniziale
   useEffect(() => {
