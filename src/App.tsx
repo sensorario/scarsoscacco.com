@@ -10,6 +10,7 @@ function App() {
   const [evaluation, setEvaluation] = useState<string>('')
   const [bestMove, setBestMove] = useState<string>('')
   const [isThinking, setIsThinking] = useState(false)
+  const [currentMoveIndex, setCurrentMoveIndex] = useState(-1)
   const engineRef = useRef<Worker | null>(null)
 
   useEffect(() => {
@@ -86,6 +87,31 @@ function App() {
     return false
   }
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const moves = game.history()
+      if (e.key === 'ArrowLeft') {
+        const newIndex = Math.max(-1, currentMoveIndex - 1)
+        setCurrentMoveIndex(newIndex)
+        if (newIndex === -1) {
+          setFen(new Chess().fen())
+        } else {
+          onMoveClick(newIndex)
+        }
+      }
+      if (e.key === 'ArrowRight') {
+        const newIndex = Math.min(moves.length - 1, currentMoveIndex + 1)
+        if (newIndex >= 0) {
+          setCurrentMoveIndex(newIndex)
+          onMoveClick(newIndex)
+        }
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [currentMoveIndex, game])
+
   const onMoveClick = (moveIndex: number) => {
     const moves = game.history()
     const tempGame = new Chess()
@@ -95,6 +121,7 @@ function App() {
       tempGame.move(moves[i])
     }
     
+    setCurrentMoveIndex(moveIndex)
     setFen(tempGame.fen())
   }
 
