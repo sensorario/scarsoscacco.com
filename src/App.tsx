@@ -248,23 +248,61 @@ function App() {
           </div>
           <div>
             <h2>PGN attuale</h2>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-              {game.history().map((move, index) => (
-                <button
-                  key={index}
-                  onClick={() => onMoveClick(index)}
-                  style={{
-                    padding: '4px 8px',
-                    cursor: 'pointer',
-                    border: '1px solid #666',
-                    borderRadius: '4px',
-                    backgroundColor: currentMoveIndex === index ? 'white' : '#4a5568',
-                    color: currentMoveIndex === index ? '#1a202c' : 'white',
-                    fontWeight: currentMoveIndex === index ? 'bold' : 'normal'
-                  }}
-                >
-                  {index % 2 === 0 ? `${Math.floor(index / 2 + 1)}.` : ''} {translateMove(move)}
-                </button>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              {game.history().reduce((pairs: any[], move: string, index: number) => {
+                if (index % 2 === 0) {
+                  // White move - start a new pair
+                  pairs.push({
+                    moveNumber: Math.floor(index / 2) + 1,
+                    white: move,
+                    whiteIndex: index,
+                    black: null,
+                    blackIndex: null
+                  })
+                } else {
+                  // Black move - complete the pair
+                  if (pairs.length > 0) {
+                    pairs[pairs.length - 1].black = move
+                    pairs[pairs.length - 1].blackIndex = index
+                  }
+                }
+                return pairs
+              }, []).map((pair, pairIndex) => (
+                <div key={pairIndex} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ color: 'white', fontWeight: 'bold' }}>
+                    {pair.moveNumber}.
+                  </span>
+                  <button
+                    onClick={() => onMoveClick(pair.whiteIndex)}
+                    style={{
+                      padding: '4px 8px',
+                      cursor: 'pointer',
+                      border: '1px solid #666',
+                      borderRadius: '4px',
+                      backgroundColor: currentMoveIndex === pair.whiteIndex ? 'white' : '#4a5568',
+                      color: currentMoveIndex === pair.whiteIndex ? '#1a202c' : 'white',
+                      fontWeight: currentMoveIndex === pair.whiteIndex ? 'bold' : 'normal'
+                    }}
+                  >
+                    {translateMove(pair.white)}
+                  </button>
+                  {pair.black && (
+                    <button
+                      onClick={() => onMoveClick(pair.blackIndex)}
+                      style={{
+                        padding: '4px 8px',
+                        cursor: 'pointer',
+                        border: '1px solid #666',
+                        borderRadius: '4px',
+                        backgroundColor: currentMoveIndex === pair.blackIndex ? 'white' : '#4a5568',
+                        color: currentMoveIndex === pair.blackIndex ? '#1a202c' : 'white',
+                        fontWeight: currentMoveIndex === pair.blackIndex ? 'bold' : 'normal'
+                      }}
+                    >
+                      {translateMove(pair.black)}
+                    </button>
+                  )}
+                </div>
               ))}
             </div>
           </div>
