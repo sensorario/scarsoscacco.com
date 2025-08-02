@@ -7,33 +7,7 @@ function App() {
   const [language, setLanguage] = useState<'it' | 'en'>('it')
   const [boardOrientation, setBoardOrientation] = useState<'white' | 'black'>('white')
 
-  const pieceNames = {
-    it: {
-      p: 'pedone',
-      n: 'cavallo',
-      b: 'alfiere',
-      r: 'torre',
-      q: 'donna',
-      k: 're'
-    },
-    en: {
-      p: 'pawn',
-      n: 'knight',
-      b: 'bishop',
-      r: 'rook',
-      q: 'queen',
-      k: 'king'
-    }
-  }
-
-  const getPieceName = (piece: string) => {
-    const [color, type] = piece.split('')
-    const colorName = color === 'w' ? (language === 'it' ? 'Bianco' : 'White') : (language === 'it' ? 'Nero' : 'Black')
-    return `${colorName} ${pieceNames[language][type.toLowerCase()]}`
-  }
-
   const [game] = useState(new Chess())
-  const [viewGame, setViewGame] = useState(new Chess())
   const [fen, setFen] = useState(game.fen())
   const [evaluation, setEvaluation] = useState<string>('')
   const [bestMove, setBestMove] = useState<string>('')
@@ -101,14 +75,8 @@ function App() {
     engineRef.current.postMessage('go depth 15')
   }
 
-  const onPieceDrop = ({
-    sourceSquare,
-    targetSquare,
-  }: {
-    piece: string;
-    sourceSquare: string;
-    targetSquare: string;
-  }) => {
+  const onPieceDrop = ({ sourceSquare, targetSquare }: { sourceSquare: string; targetSquare: string | null; }) => {
+    if (!targetSquare) return false
     const move = game.move({ from: sourceSquare, to: targetSquare, promotion: 'q' })
     if (move) {
       setFen(game.fen())
@@ -192,7 +160,7 @@ function App() {
     if (language === 'en') return move
 
     return move.split('').map(char => {
-      return moveTranslations.it[char] || char
+      return moveTranslations.it[char as keyof typeof moveTranslations.it] || char
     }).join('')
   }
 
@@ -256,9 +224,7 @@ function App() {
                 color: 'rgb(0, 128, 0)'
               }] : undefined,
               position: fen,
-              onPieceDrop: onPieceDrop,
-              width: 400,
-              height: 400,
+              onPieceDrop: onPieceDrop || '',
               boardOrientation: boardOrientation,
             }} />
           </div>
