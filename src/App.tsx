@@ -171,6 +171,17 @@ function App() {
     }
   }
 
+  const buttonTexts = {
+    it: {
+      rotateBoard: 'Ruota scacchiera',
+      makeBestMove: 'Fai la mossa migliore'
+    },
+    en: {
+      rotateBoard: 'Rotate board',
+      makeBestMove: 'Make best move'
+    }
+  }
+
   const translateMove = (move: string) => {
     if (language === 'en') return move
 
@@ -227,7 +238,7 @@ function App() {
                 cursor: 'pointer'
               }}
             >
-              Ruota scacchiera
+              {buttonTexts[language].rotateBoard}
             </button>
           </div>
           <h1>Scacchiera</h1>
@@ -270,8 +281,7 @@ function App() {
               }}
               disabled={!bestMove}
             >
-
-              Fai la mossa migliore
+              {buttonTexts[language].makeBestMove}
             </button>
 
           </div>
