@@ -315,8 +315,12 @@ function App() {
                   <span style={{ color: 'white', fontWeight: 'bold' }}>
                     {pair.moveNumber}.
                   </span>
-                  <button
-                    onClick={() => onMoveClick(pair.whiteIndex)}
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      onMoveClick(pair.whiteIndex)
+                    }}
                     style={{
                       padding: '4px 8px',
                       cursor: 'pointer',
@@ -324,14 +328,20 @@ function App() {
                       borderRadius: '4px',
                       backgroundColor: currentMoveIndex === pair.whiteIndex ? 'white' : '#4a5568',
                       color: currentMoveIndex === pair.whiteIndex ? '#1a202c' : 'white',
-                      fontWeight: currentMoveIndex === pair.whiteIndex ? 'bold' : 'normal'
+                      fontWeight: currentMoveIndex === pair.whiteIndex ? 'bold' : 'normal',
+                      textDecoration: 'none',
+                      display: 'inline-block'
                     }}
                   >
                     {translateMove(pair.white)}
-                  </button>
+                  </a>
                   {pair.black && (
-                    <button
-                      onClick={() => onMoveClick(pair.blackIndex)}
+                    <a
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        onMoveClick(pair.blackIndex)
+                      }}
                       style={{
                         padding: '4px 8px',
                         cursor: 'pointer',
@@ -339,11 +349,13 @@ function App() {
                         borderRadius: '4px',
                         backgroundColor: currentMoveIndex === pair.blackIndex ? 'white' : '#4a5568',
                         color: currentMoveIndex === pair.blackIndex ? '#1a202c' : 'white',
-                        fontWeight: currentMoveIndex === pair.blackIndex ? 'bold' : 'normal'
+                        fontWeight: currentMoveIndex === pair.blackIndex ? 'bold' : 'normal',
+                        textDecoration: 'none',
+                        display: 'inline-block'
                       }}
                     >
                       {translateMove(pair.black)}
-                    </button>
+                    </a>
                   )}
                 </div>
               ))}
