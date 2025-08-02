@@ -75,6 +75,21 @@ function App() {
     engineRef.current.postMessage('go depth 15')
   }
 
+  const makeBestMove = () => {
+    if (!bestMove) return
+
+    const from = bestMove.substring(0, 2)
+    const to = bestMove.substring(2, 4)
+    const promotion = bestMove.length > 4 ? bestMove.substring(4, 5) : undefined
+
+    const move = game.move({ from, to, promotion })
+    if (move) {
+      setFen(game.fen())
+      setCurrentMoveIndex(game.history().length - 1)
+      setIsThinking(false)
+    }
+  }
+
   const onPieceDrop = ({ sourceSquare, targetSquare }: { sourceSquare: string; targetSquare: string | null; }) => {
     if (!targetSquare) return false
     const move = game.move({ from: sourceSquare, to: targetSquare, promotion: 'q' })
@@ -241,6 +256,24 @@ function App() {
           <div>
             <h2>Mossa migliore</h2>
             <pre>{bestMove || 'In analisi...'}</pre>
+
+            <button
+              onClick={makeBestMove}
+              style={{
+                padding: '8px 16px',
+                borderRadius: '4px',
+                border: '1px solid #666',
+                backgroundColor: bestMove ? '#22c55e' : '#4a5568',
+                color: 'white',
+                cursor: 'pointer',
+                marginTop: '8px'
+              }}
+              disabled={!bestMove}
+            >
+
+              Fai la mossa migliore
+            </button>
+
           </div>
           <div>
             <h2>FEN attuale</h2>
