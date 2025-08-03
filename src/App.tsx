@@ -98,8 +98,11 @@ function App() {
     const move = game.move({ from, to, promotion })
     if (move) {
       setFen(game.fen())
-      setCurrentMoveIndex(game.history().length - 1)
       setIsThinking(false)
+      // Delay the move index update to show the move after the piece animation
+      setTimeout(() => {
+        setCurrentMoveIndex(game.history().length - 1)
+      }, 300)
     }
   }
 
@@ -131,8 +134,11 @@ function App() {
     const move = game.move({ from: sourceSquare, to: targetSquare, promotion: 'q' })
     if (move) {
       setFen(game.fen())
-      setCurrentMoveIndex(game.history().length - 1)
       setIsThinking(false)
+      // Delay the move index update to show the move after the piece animation
+      setTimeout(() => {
+        setCurrentMoveIndex(game.history().length - 1)
+      }, 300)
       return true
     }
     return false
@@ -237,14 +243,14 @@ function App() {
 
   const handleColorSelection = (color: 'white' | 'black' | 'auto') => {
     setUserColor(color)
-    
+
     if (color === 'auto') {
       setBoardOrientation('white') // Default orientation for auto mode
       setAutoMove(true) // Enable auto move for computer vs computer
     } else {
       setBoardOrientation(color)
     }
-    
+
     setShowColorModal(false)
   }
 

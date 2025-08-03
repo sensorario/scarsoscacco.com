@@ -1,4 +1,5 @@
 import { Chess } from 'chess.js'
+import { useEffect, useRef } from 'react'
 import './PgnContainer.css'
 
 interface PgnContainerProps {
@@ -14,9 +15,17 @@ export default function PgnContainer({
     onMoveClick,
     translateMove
 }: PgnContainerProps) {
+    const movesRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        if (movesRef.current) {
+            movesRef.current.scrollTop = movesRef.current.scrollHeight
+        }
+    }, [game.history().length])
+
     return (
         <div className='pgn-container'>
-            <div className="pgn-moves">
+            <div className="pgn-moves" ref={movesRef}>
                 {game.history().reduce((pairs: any[], move: string, index: number) => {
                     if (index % 2 === 0) {
                         pairs.push({
