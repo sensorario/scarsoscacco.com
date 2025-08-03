@@ -98,7 +98,7 @@ function App() {
       // Automatically make the best move for black after a short delay
       const timer = setTimeout(() => {
         makeBestMove()
-      }, 1000) // 1 second delay
+      }, 0) // 1 second delay
 
       return () => clearTimeout(timer)
     }
@@ -230,7 +230,6 @@ function App() {
       <div style={{
         width: '400px',
         height: '20px',
-        border: '2px solid #666',
         borderRadius: '4px',
         overflow: 'hidden',
         display: 'flex',
