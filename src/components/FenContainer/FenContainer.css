@@ -90,3 +90,29 @@
 .fen-button:active {
     background-color: #1a202c;
 }
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.copying-icon {
+    display: inline-block;
+    animation: spin 0.5s linear;
+    color: #22c55e;
+}
+
+.fen-button:disabled {
+    opacity: 0.8;
+    cursor: not-allowed;
+}
+}
+
+.fen-button:disabled {
+    opacity: 0.8;
+    cursor: not-allowed;
+}

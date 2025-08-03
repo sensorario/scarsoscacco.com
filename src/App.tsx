@@ -203,14 +203,14 @@ function App() {
   const buttonTexts = {
     it: {
       rotateBoard: '↻',
-      makeBestMove: '→',
+      makeBestMove: isThinking ? '⟳' : '→',
       autoMove: '⚡',
       italian: '🇮🇹',
       english: '🇬🇧'
     },
     en: {
       rotateBoard: '↻',
-      makeBestMove: '→',
+      makeBestMove: isThinking ? '⟳' : '→',
       autoMove: '⚡',
       italian: '🇮🇹',
       english: '🇬🇧'
@@ -249,6 +249,7 @@ function App() {
             setAutoMove={setAutoMove}
             makeBestMove={makeBestMove}
             bestMove={bestMove}
+            isThinking={isThinking}
             fenVisible={fenVisible}
             setFenVisible={setFenVisible}
             buttonTexts={buttonTexts}

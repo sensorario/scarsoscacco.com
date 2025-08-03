@@ -9,6 +9,7 @@ interface NavigationBarProps {
     setAutoMove: (autoMove: boolean | ((prev: boolean) => boolean)) => void
     makeBestMove: () => void
     bestMove: string
+    isThinking: boolean
     fenVisible: boolean
     setFenVisible: (visible: boolean | ((prev: boolean) => boolean)) => void
     buttonTexts: {
@@ -26,6 +27,7 @@ export default function NavigationBar({
     setAutoMove,
     makeBestMove,
     bestMove,
+    isThinking,
     fenVisible,
     setFenVisible,
     buttonTexts
@@ -63,9 +65,11 @@ export default function NavigationBar({
                     <button
                         onClick={makeBestMove}
                         className={`nav-button action-button ${bestMove ? 'active' : ''}`}
-                        disabled={!bestMove}
+                        disabled={!bestMove || isThinking}
                     >
-                        {buttonTexts[language].makeBestMove}
+                        <span className={isThinking ? 'thinking-icon' : ''}>
+                            {buttonTexts[language].makeBestMove}
+                        </span>
                     </button>
                     <button
                         onClick={() => setFenVisible(prev => !prev)}
