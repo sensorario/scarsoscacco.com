@@ -211,6 +211,49 @@ function App() {
     }).join('')
   }
 
+  const getEvaluationBar = () => {
+    const evalNum = parseFloat(evaluation) || 0
+    // Convert evaluation to percentage (0-100%)
+    // Positive = white advantage, negative = black advantage
+    let whitePercentage
+    
+    if (evalNum >= 5) {
+      whitePercentage = 100 // Complete white advantage
+    } else if (evalNum <= -5) {
+      whitePercentage = 0 // Complete black advantage
+    } else {
+      // Map -5 to +5 range to 0% to 100%
+      whitePercentage = 50 + (evalNum * 10)
+    }
+
+    return (
+      <div style={{
+        width: '400px',
+        height: '20px',
+        border: '2px solid #666',
+        borderRadius: '4px',
+        overflow: 'hidden',
+        display: 'flex',
+        marginTop: '10px'
+      }}>
+        <div 
+          style={{
+            width: `${whitePercentage}%`,
+            backgroundColor: 'white',
+            transition: 'width 0.3s ease'
+          }}
+        />
+        <div 
+          style={{
+            width: `${100 - whitePercentage}%`,
+            backgroundColor: 'black',
+            transition: 'width 0.3s ease'
+          }}
+        />
+      </div>
+    )
+  }
+
   return (
     <>
       <div style={{
@@ -300,7 +343,6 @@ function App() {
               </button>
             </div>
           </div>
-          <h1>Scacchiera</h1>
           <div className="chessboard-container">
             <Chessboard options={{
               arrows: bestMove ? [{
@@ -313,6 +355,19 @@ function App() {
               boardOrientation: boardOrientation,
             }} />
           </div>
+          {getEvaluationBar()}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            width: '400px',
+            fontSize: '12px',
+            color: 'white',
+            marginTop: '5px'
+          }}>
+            <span>Black Advantage</span>
+            <span>Equal</span>
+            <span>White Advantage</span>
+          </div>
         </div>
         <div style={{
           display: 'flex',
@@ -322,10 +377,6 @@ function App() {
           <div>
             <h2>Valutazione</h2>
             <pre>{evaluation || 'In analisi...'}</pre>
-          </div>
-          <div>
-            <h2>Mossa migliore</h2>
-            <pre>{bestMove || 'In analisi...'}</pre>
           </div>
           <div>
             <h2>FEN attuale</h2>
