@@ -216,7 +216,7 @@ function App() {
     // Convert evaluation to percentage (0-100%)
     // Positive = white advantage, negative = black advantage
     let whitePercentage
-    
+
     if (evalNum >= 5) {
       whitePercentage = 100 // Complete white advantage
     } else if (evalNum <= -5) {
@@ -236,14 +236,14 @@ function App() {
         display: 'flex',
         marginTop: '10px'
       }}>
-        <div 
+        <div
           style={{
             width: `${whitePercentage}%`,
             backgroundColor: 'white',
             transition: 'width 0.3s ease'
           }}
         />
-        <div 
+        <div
           style={{
             width: `${100 - whitePercentage}%`,
             backgroundColor: 'black',
@@ -268,7 +268,7 @@ function App() {
               <button
                 onClick={() => setLanguage('it')}
                 style={{
-                  padding: '8px 16px',
+                  padding: '4px 8px',
                   borderRadius: '4px 0 0 4px',
                   border: '1px solid #666',
                   backgroundColor: language === 'it' ? 'white' : '#4a5568',
@@ -282,7 +282,7 @@ function App() {
               <button
                 onClick={() => setLanguage('en')}
                 style={{
-                  padding: '8px 16px',
+                  padding: '4px 8px',
                   borderRadius: '0 4px 4px 0',
                   border: '1px solid #666',
                   borderLeft: 'none',
@@ -299,7 +299,7 @@ function App() {
               <button
                 onClick={() => setBoardOrientation(prev => prev === 'white' ? 'black' : 'white')}
                 style={{
-                  padding: '8px 16px',
+                  padding: '4px 8px',
                   borderRadius: '4px 0 0 4px',
                   border: '1px solid #666',
                   backgroundColor: '#4a5568',
@@ -313,7 +313,7 @@ function App() {
               <button
                 onClick={() => setAutoMove(prev => !prev)}
                 style={{
-                  padding: '8px 16px',
+                  padding: '4px 8px',
                   borderRadius: '0',
                   border: '1px solid #666',
                   borderLeft: 'none',
@@ -328,7 +328,7 @@ function App() {
               <button
                 onClick={makeBestMove}
                 style={{
-                  padding: '8px 16px',
+                  padding: '4px 8px',
                   borderRadius: '0 4px 4px 0',
                   border: '1px solid #666',
                   borderLeft: 'none',
@@ -374,10 +374,6 @@ function App() {
           flexDirection: 'column',
           gap: '20px',
         }}>
-          <div>
-            <h2>Valutazione</h2>
-            <pre>{evaluation || 'In analisi...'}</pre>
-          </div>
           <div>
             <h2>FEN attuale</h2>
             <pre style={{ wordWrap: 'break-word' }}>{fen}</pre>
