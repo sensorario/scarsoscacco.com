@@ -279,84 +279,86 @@ function App() {
         padding: '20px',
       }}>
         <div>
-          <div style={{ marginBottom: '20px', display: 'flex', gap: '16px', alignItems: 'center' }}>
-            <div style={{ display: 'flex' }}>
-              <button
-                onClick={() => setLanguage('it')}
-                style={{
-                  padding: '4px 8px',
-                  borderRadius: '4px 0 0 4px',
-                  border: '1px solid #666',
-                  backgroundColor: language === 'it' ? 'white' : '#4a5568',
-                  color: language === 'it' ? '#1a202c' : 'white',
-                  cursor: 'pointer',
-                  fontSize: '18px'
-                }}
-              >
-                {buttonTexts[language].italian}
-              </button>
-              <button
-                onClick={() => setLanguage('en')}
-                style={{
-                  padding: '4px 8px',
-                  borderRadius: '0 4px 4px 0',
-                  border: '1px solid #666',
-                  borderLeft: 'none',
-                  backgroundColor: language === 'en' ? 'white' : '#4a5568',
-                  color: language === 'en' ? '#1a202c' : 'white',
-                  cursor: 'pointer',
-                  fontSize: '18px'
-                }}
-              >
-                {buttonTexts[language].english}
-              </button>
-            </div>
-            <div style={{ display: 'flex' }}>
-              <button
-                onClick={() => setBoardOrientation(prev => prev === 'white' ? 'black' : 'white')}
-                style={{
-                  padding: '4px 8px',
-                  borderRadius: '4px 0 0 4px',
-                  border: '1px solid #666',
-                  backgroundColor: '#4a5568',
-                  color: 'white',
-                  cursor: 'pointer',
-                  fontSize: '18px'
-                }}
-              >
-                {buttonTexts[language].rotateBoard}
-              </button>
-              <button
-                onClick={() => setAutoMove(prev => !prev)}
-                style={{
-                  padding: '4px 8px',
-                  borderRadius: '0',
-                  border: '1px solid #666',
-                  borderLeft: 'none',
-                  backgroundColor: autoMove ? '#22c55e' : '#4a5568',
-                  color: 'white',
-                  cursor: 'pointer',
-                  fontSize: '18px'
-                }}
-              >
-                {buttonTexts[language].autoMove}
-              </button>
-              <button
-                onClick={makeBestMove}
-                style={{
-                  padding: '4px 8px',
-                  borderRadius: '0 4px 4px 0',
-                  border: '1px solid #666',
-                  borderLeft: 'none',
-                  backgroundColor: bestMove ? '#22c55e' : '#4a5568',
-                  color: 'white',
-                  cursor: 'pointer',
-                  fontSize: '18px'
-                }}
-                disabled={!bestMove}
-              >
-                {buttonTexts[language].makeBestMove}
-              </button>
+          <div className="navigation-bar">
+            <div style={{ marginBottom: '20px', display: 'flex', gap: '16px', alignItems: 'center' }}>
+              <div style={{ display: 'flex' }}>
+                <button
+                  onClick={() => setLanguage('it')}
+                  style={{
+                    padding: '4px 8px',
+                    borderRadius: '4px 0 0 4px',
+                    border: '1px solid #666',
+                    backgroundColor: language === 'it' ? 'white' : '#4a5568',
+                    color: language === 'it' ? '#1a202c' : 'white',
+                    cursor: 'pointer',
+                    fontSize: '18px'
+                  }}
+                >
+                  {buttonTexts[language].italian}
+                </button>
+                <button
+                  onClick={() => setLanguage('en')}
+                  style={{
+                    padding: '4px 8px',
+                    borderRadius: '0 4px 4px 0',
+                    border: '1px solid #666',
+                    borderLeft: 'none',
+                    backgroundColor: language === 'en' ? 'white' : '#4a5568',
+                    color: language === 'en' ? '#1a202c' : 'white',
+                    cursor: 'pointer',
+                    fontSize: '18px'
+                  }}
+                >
+                  {buttonTexts[language].english}
+                </button>
+              </div>
+              <div style={{ display: 'flex' }}>
+                <button
+                  onClick={() => setBoardOrientation(prev => prev === 'white' ? 'black' : 'white')}
+                  style={{
+                    padding: '4px 8px',
+                    borderRadius: '4px 0 0 4px',
+                    border: '1px solid #666',
+                    backgroundColor: '#4a5568',
+                    color: 'white',
+                    cursor: 'pointer',
+                    fontSize: '18px'
+                  }}
+                >
+                  {buttonTexts[language].rotateBoard}
+                </button>
+                <button
+                  onClick={() => setAutoMove(prev => !prev)}
+                  style={{
+                    padding: '4px 8px',
+                    borderRadius: '0',
+                    border: '1px solid #666',
+                    borderLeft: 'none',
+                    backgroundColor: autoMove ? '#22c55e' : '#4a5568',
+                    color: 'white',
+                    cursor: 'pointer',
+                    fontSize: '18px'
+                  }}
+                >
+                  {buttonTexts[language].autoMove}
+                </button>
+                <button
+                  onClick={makeBestMove}
+                  style={{
+                    padding: '4px 8px',
+                    borderRadius: '0 4px 4px 0',
+                    border: '1px solid #666',
+                    borderLeft: 'none',
+                    backgroundColor: bestMove ? '#22c55e' : '#4a5568',
+                    color: 'white',
+                    cursor: 'pointer',
+                    fontSize: '18px'
+                  }}
+                  disabled={!bestMove}
+                >
+                  {buttonTexts[language].makeBestMove}
+                </button>
+              </div>
             </div>
           </div>
           <div className="chessboard-container">
@@ -371,30 +373,24 @@ function App() {
               boardOrientation: boardOrientation,
             }} />
           </div>
-          {getEvaluationBar()}
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            width: '400px',
-            fontSize: '12px',
-            color: 'white',
-            marginTop: '5px'
-          }}>
-            <span>Black Advantage</span>
-            <span>Equal</span>
-            <span>White Advantage</span>
+          <div className="evaluation-bar">
+            {getEvaluationBar()}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              width: '400px',
+              fontSize: '12px',
+              color: 'white',
+              marginTop: '5px'
+            }}>
+              <span>Black Advantage</span>
+              <span>Equal</span>
+              <span>White Advantage</span>
+            </div>
           </div>
-        </div>
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '20px',
-        }}>
-          <div>
-            <h2>FEN attuale</h2>
-            <pre style={{ wordWrap: 'break-word' }}>{fen}</pre>
-          </div>
-          <div>
+
+
+          <div className='pgn-container'>
             <h2>PGN attuale</h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
               {game.history().reduce((pairs: any[], move: string, index: number) => {
@@ -466,7 +462,13 @@ function App() {
               ))}
             </div>
           </div>
+
+          <div>
+            <h2>FEN attuale</h2>
+            <pre style={{ wordWrap: 'break-word' }}>{fen}</pre>
+          </div>
         </div>
+
       </div>
     </>
   )
