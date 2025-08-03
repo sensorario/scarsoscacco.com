@@ -1,7 +1,10 @@
 import './App.css'
-import { Chessboard } from 'react-chessboard'
-import { Chess, type Square } from 'chess.js'
+import { Chess } from 'chess.js'
 import { useState, useEffect, useRef } from "react"
+import NavigationBar from './components/NavigationBar/NavigationBar'
+import ChessboardContainer from './components/ChessboardContainer/ChessboardContainer'
+import EvaluationBar from './components/EvaluationBar/EvaluationBar'
+import PgnContainer from './components/PgnContainer/PgnContainer'
 
 function App() {
   const [language, setLanguage] = useState<'it' | 'en'>('it')
@@ -146,9 +149,11 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [currentMoveIndex, game])
 
-  const onMoveClick = (moveIndex: number) => {
+  const onMoveClick = (moveIndex: number | null) => {
     const moves = game.history()
     const tempGame = new Chess()
+
+    if (!moveIndex) return;
 
     // Riproduci le mosse fino all'indice selezionato
     for (let i = 0; i <= moveIndex; i++) {
@@ -211,65 +216,6 @@ function App() {
     }).join('')
   }
 
-  const getEvaluationBar = () => {
-    const evalNum = parseFloat(evaluation) || 0
-    // Convert evaluation to percentage (0-100%)
-    // Positive = white advantage, negative = black advantage
-    let whitePercentage
-
-    if (evalNum >= 5) {
-      whitePercentage = 100 // Complete white advantage
-    } else if (evalNum <= -5) {
-      whitePercentage = 0 // Complete black advantage
-    } else {
-      // Map -5 to +5 range to 0% to 100%
-      whitePercentage = 50 + (evalNum * 10)
-    }
-
-    return (
-      <div style={{
-        width: '400px',
-        height: '20px',
-        borderRadius: '4px',
-        overflow: 'hidden',
-        display: 'flex',
-        marginTop: '10px',
-        position: 'relative'
-      }}>
-        <div
-          style={{
-            width: `${whitePercentage}%`,
-            backgroundColor: 'white',
-            transition: 'width 0.3s ease'
-          }}
-        />
-        <div
-          style={{
-            width: `${100 - whitePercentage}%`,
-            backgroundColor: 'black',
-            transition: 'width 0.3s ease'
-          }}
-        />
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '12px',
-          fontWeight: 'bold',
-          color: whitePercentage > 50 ? 'black' : 'white',
-          textShadow: whitePercentage > 50 ? '1px 1px 2px white' : '1px 1px 2px black'
-        }}>
-          {evaluation || '0'}
-        </div>
-      </div>
-    )
-  }
-
   return (
     <>
       <div style={{
@@ -279,196 +225,39 @@ function App() {
         padding: '20px',
       }}>
         <div>
-          <div className="navigation-bar">
-            <div style={{ marginBottom: '20px', display: 'flex', gap: '16px', alignItems: 'center' }}>
-              <div style={{ display: 'flex' }}>
-                <button
-                  onClick={() => setLanguage('it')}
-                  style={{
-                    padding: '4px 8px',
-                    borderRadius: '4px 0 0 4px',
-                    border: '1px solid #666',
-                    backgroundColor: language === 'it' ? 'white' : '#4a5568',
-                    color: language === 'it' ? '#1a202c' : 'white',
-                    cursor: 'pointer',
-                    fontSize: '18px'
-                  }}
-                >
-                  {buttonTexts[language].italian}
-                </button>
-                <button
-                  onClick={() => setLanguage('en')}
-                  style={{
-                    padding: '4px 8px',
-                    borderRadius: '0 4px 4px 0',
-                    border: '1px solid #666',
-                    borderLeft: 'none',
-                    backgroundColor: language === 'en' ? 'white' : '#4a5568',
-                    color: language === 'en' ? '#1a202c' : 'white',
-                    cursor: 'pointer',
-                    fontSize: '18px'
-                  }}
-                >
-                  {buttonTexts[language].english}
-                </button>
-              </div>
-              <div style={{ display: 'flex' }}>
-                <button
-                  onClick={() => setBoardOrientation(prev => prev === 'white' ? 'black' : 'white')}
-                  style={{
-                    padding: '4px 8px',
-                    borderRadius: '4px 0 0 4px',
-                    border: '1px solid #666',
-                    backgroundColor: '#4a5568',
-                    color: 'white',
-                    cursor: 'pointer',
-                    fontSize: '18px'
-                  }}
-                >
-                  {buttonTexts[language].rotateBoard}
-                </button>
-                <button
-                  onClick={() => setAutoMove(prev => !prev)}
-                  style={{
-                    padding: '4px 8px',
-                    borderRadius: '0',
-                    border: '1px solid #666',
-                    borderLeft: 'none',
-                    backgroundColor: autoMove ? '#22c55e' : '#4a5568',
-                    color: 'white',
-                    cursor: 'pointer',
-                    fontSize: '18px'
-                  }}
-                >
-                  {buttonTexts[language].autoMove}
-                </button>
-                <button
-                  onClick={makeBestMove}
-                  style={{
-                    padding: '4px 8px',
-                    borderRadius: '0 4px 4px 0',
-                    border: '1px solid #666',
-                    borderLeft: 'none',
-                    backgroundColor: bestMove ? '#22c55e' : '#4a5568',
-                    color: 'white',
-                    cursor: 'pointer',
-                    fontSize: '18px'
-                  }}
-                  disabled={!bestMove}
-                >
-                  {buttonTexts[language].makeBestMove}
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="chessboard-container">
-            <Chessboard options={{
-              arrows: bestMove ? [{
-                startSquare: bestMove.substring(0, 2) as Square,
-                endSquare: bestMove.substring(2, 4) as Square,
-                color: 'rgb(0, 128, 0)'
-              }] : undefined,
-              position: fen,
-              onPieceDrop: onPieceDrop || '',
-              boardOrientation: boardOrientation,
-            }} />
-          </div>
-          <div className="evaluation-bar">
-            {getEvaluationBar()}
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              width: '400px',
-              fontSize: '12px',
-              color: 'white',
-              marginTop: '5px'
-            }}>
-              <span>Black Advantage</span>
-              <span>Equal</span>
-              <span>White Advantage</span>
-            </div>
-          </div>
+          <NavigationBar
+            language={language}
+            setLanguage={setLanguage}
+            boardOrientation={boardOrientation}
+            setBoardOrientation={setBoardOrientation}
+            autoMove={autoMove}
+            setAutoMove={setAutoMove}
+            makeBestMove={makeBestMove}
+            bestMove={bestMove}
+            buttonTexts={buttonTexts}
+          />
 
+          <ChessboardContainer
+            bestMove={bestMove}
+            fen={fen}
+            onPieceDrop={onPieceDrop}
+            boardOrientation={boardOrientation}
+          />
 
-          <div className='pgn-container'>
-            <h2>PGN attuale</h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-              {game.history().reduce((pairs: any[], move: string, index: number) => {
-                if (index % 2 === 0) {
-                  // White move - start a new pair
-                  pairs.push({
-                    moveNumber: Math.floor(index / 2) + 1,
-                    white: move,
-                    whiteIndex: index,
-                    black: null,
-                    blackIndex: null
-                  })
-                } else {
-                  // Black move - complete the pair
-                  if (pairs.length > 0) {
-                    pairs[pairs.length - 1].black = move
-                    pairs[pairs.length - 1].blackIndex = index
-                  }
-                }
-                return pairs
-              }, []).map((pair, pairIndex) => (
-                <div key={pairIndex} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <span style={{ color: 'white', fontWeight: 'bold' }}>
-                    {pair.moveNumber}.
-                  </span>
-                  <a
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      onMoveClick(pair.whiteIndex)
-                    }}
-                    style={{
-                      padding: '4px 8px',
-                      cursor: 'pointer',
-                      border: '1px solid #666',
-                      borderRadius: '4px',
-                      backgroundColor: currentMoveIndex === pair.whiteIndex ? 'white' : '#4a5568',
-                      color: currentMoveIndex === pair.whiteIndex ? '#1a202c' : 'white',
-                      fontWeight: currentMoveIndex === pair.whiteIndex ? 'bold' : 'normal',
-                      textDecoration: 'none',
-                      display: 'inline-block'
-                    }}
-                  >
-                    {translateMove(pair.white)}
-                  </a>
-                  {pair.black && (
-                    <a
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault()
-                        onMoveClick(pair.blackIndex)
-                      }}
-                      style={{
-                        padding: '4px 8px',
-                        cursor: 'pointer',
-                        border: '1px solid #666',
-                        borderRadius: '4px',
-                        backgroundColor: currentMoveIndex === pair.blackIndex ? 'white' : '#4a5568',
-                        color: currentMoveIndex === pair.blackIndex ? '#1a202c' : 'white',
-                        fontWeight: currentMoveIndex === pair.blackIndex ? 'bold' : 'normal',
-                        textDecoration: 'none',
-                        display: 'inline-block'
-                      }}
-                    >
-                      {translateMove(pair.black)}
-                    </a>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+          <EvaluationBar evaluation={evaluation} />
+
+          <PgnContainer
+            game={game}
+            currentMoveIndex={currentMoveIndex}
+            onMoveClick={onMoveClick}
+            translateMove={translateMove}
+          />
 
           <div>
             <h2>FEN attuale</h2>
             <pre style={{ wordWrap: 'break-word' }}>{fen}</pre>
           </div>
         </div>
-
       </div>
     </>
   )

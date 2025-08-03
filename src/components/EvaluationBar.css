@@ -1,0 +1,44 @@
+.evaluation-bar {
+  margin-top: 10px;
+}
+
+.evaluation-bar-container {
+  width: 400px;
+  height: 20px;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  position: relative;
+}
+
+.evaluation-white {
+  background-color: white;
+  transition: width 0.3s ease;
+}
+
+.evaluation-black {
+  background-color: black;
+  transition: width 0.3s ease;
+}
+
+.evaluation-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.evaluation-labels {
+  display: flex;
+  justify-content: space-between;
+  width: 400px;
+  font-size: 12px;
+  color: white;
+  margin-top: 5px;
+}

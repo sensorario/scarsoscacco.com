@@ -1,0 +1,70 @@
+.navigation-bar {
+  margin-bottom: 20px;
+}
+
+.navigation-controls {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.button-group {
+  display: flex;
+}
+
+.nav-button {
+  padding: 4px 8px;
+  border: 1px solid #666;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.nav-button:first-child {
+  border-radius: 4px 0 0 4px;
+}
+
+.nav-button:last-child {
+  border-radius: 0 4px 4px 0;
+}
+
+.nav-button:not(:first-child) {
+  border-left: none;
+}
+
+.nav-button:not(:first-child):not(:last-child) {
+  border-radius: 0;
+}
+
+.language-button-it {
+  background-color: white;
+  color: #1a202c;
+}
+
+.language-button-it.inactive {
+  background-color: #4a5568;
+  color: white;
+}
+
+.language-button-en {
+  background-color: white;
+  color: #1a202c;
+}
+
+.language-button-en.inactive {
+  background-color: #4a5568;
+  color: white;
+}
+
+.action-button {
+  background-color: #4a5568;
+  color: white;
+}
+
+.action-button.active {
+  background-color: #22c55e;
+}
+
+.action-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
