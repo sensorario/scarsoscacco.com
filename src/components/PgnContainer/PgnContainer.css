@@ -1,3 +1,7 @@
+.pgn-container {
+  width: 300px;
+}
+
 .pgn-moves {
   display: flex;
   flex-direction: column;

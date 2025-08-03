@@ -1,7 +1,3 @@
-.navigation-bar {
-  margin-bottom: 20px;
-}
-
 .navigation-controls {
   display: flex;
   gap: 16px;
@@ -17,6 +13,11 @@
   border: 1px solid #666;
   cursor: pointer;
   font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  box-sizing: border-box;
 }
 
 .nav-button:first-child {
@@ -79,6 +80,12 @@
 }
 
 .thinking-icon {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   animation: spin 1s linear infinite;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }

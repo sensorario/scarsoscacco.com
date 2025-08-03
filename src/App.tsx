@@ -7,6 +7,7 @@ import EvaluationBar from './components/EvaluationBar/EvaluationBar'
 import PgnContainer from './components/PgnContainer/PgnContainer'
 import FenContainer from './components/FenContainer/FenContainer'
 import ColorSelectionModal from './components/ColorSelectionModal/ColorSelectionModal'
+import LogMessage from './components/LogMessage/LogMessage'
 
 function App() {
   const [language, setLanguage] = useState<'it' | 'en'>('it')
@@ -14,6 +15,8 @@ function App() {
   const [userColor, setUserColor] = useState<'white' | 'black' | null>(null)
   const [showColorModal, setShowColorModal] = useState(true)
   const [fenVisible, setFenVisible] = useState(false)
+  const [helpVisible, setHelpVisible] = useState(false)
+  const [logMessage, setLogMessage] = useState('')
 
   const [game] = useState(new Chess())
   const [fen, setFen] = useState(game.fen())
@@ -203,14 +206,14 @@ function App() {
   const buttonTexts = {
     it: {
       rotateBoard: '↻',
-      makeBestMove: isThinking ? '⟳' : '→',
+      makeBestMove: isThinking ? '↻' : '→',
       autoMove: '⚡',
       italian: '🇮🇹',
       english: '🇬🇧'
     },
     en: {
       rotateBoard: '↻',
-      makeBestMove: isThinking ? '⟳' : '→',
+      makeBestMove: isThinking ? '↻' : '→',
       autoMove: '⚡',
       italian: '🇮🇹',
       english: '🇬🇧'
@@ -229,6 +232,14 @@ function App() {
     setUserColor(color)
     setBoardOrientation(color)
     setShowColorModal(false)
+  }
+
+  const handleButtonHover = (message: string) => {
+    setLogMessage(message)
+  }
+
+  const handleButtonLeave = () => {
+    setLogMessage('')
   }
 
   return (
@@ -252,8 +263,14 @@ function App() {
             isThinking={isThinking}
             fenVisible={fenVisible}
             setFenVisible={setFenVisible}
+            helpVisible={helpVisible}
+            setHelpVisible={setHelpVisible}
+            onButtonHover={handleButtonHover}
+            onButtonLeave={handleButtonLeave}
             buttonTexts={buttonTexts}
           />
+
+          <LogMessage message={logMessage} language={language} isVisible={helpVisible} />
 
           <ChessboardContainer
             bestMove={bestMove}
