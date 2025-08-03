@@ -188,14 +188,18 @@ function App() {
 
   const buttonTexts = {
     it: {
-      rotateBoard: 'Ruota scacchiera',
-      makeBestMove: 'Fai la mossa migliore',
-      autoMove: 'Auto mossa'
+      rotateBoard: '🔄',
+      makeBestMove: '🎯',
+      autoMove: '🤖',
+      italian: '🇮🇹',
+      english: '🇬🇧'
     },
     en: {
-      rotateBoard: 'Rotate board',
-      makeBestMove: 'Make best move',
-      autoMove: 'Auto move'
+      rotateBoard: '🔄',
+      makeBestMove: '🎯',
+      autoMove: '🤖',
+      italian: '🇮🇹',
+      english: '🇬🇧'
     }
   }
 
@@ -216,60 +220,85 @@ function App() {
         padding: '20px',
       }}>
         <div>
-          <div style={{ marginBottom: '20px', display: 'flex', gap: '8px' }}>
-            <button
-              onClick={() => setLanguage('it')}
-              style={{
-                padding: '8px 16px',
-                borderRadius: '4px',
-                border: '1px solid #666',
-                backgroundColor: language === 'it' ? 'white' : '#4a5568',
-                color: language === 'it' ? '#1a202c' : 'white',
-                marginRight: '8px',
-                cursor: 'pointer'
-              }}
-            >
-              Italiano
-            </button>
-            <button
-              onClick={() => setLanguage('en')}
-              style={{
-                padding: '8px 16px',
-                borderRadius: '4px',
-                border: '1px solid #666',
-                backgroundColor: language === 'en' ? 'white' : '#4a5568',
-                color: language === 'en' ? '#1a202c' : 'white',
-                cursor: 'pointer'
-              }}
-            >
-              English
-            </button>
-            <button
-              onClick={() => setBoardOrientation(prev => prev === 'white' ? 'black' : 'white')}
-              style={{
-                padding: '8px 16px',
-                borderRadius: '4px',
-                border: '1px solid #666',
-                backgroundColor: '#4a5568',
-                color: 'white',
-                cursor: 'pointer'
-              }}
-            >
-              {buttonTexts[language].rotateBoard}
-            </button>
-            <button
-              onClick={() => setAutoMove(prev => !prev)}
-              style={{
-                padding: '8px 16px',
-                borderRadius: '4px',
-                border: '1px solid #666',
-                backgroundColor: autoMove ? '#22c55e' : '#4a5568',
-                color: 'white',
-                cursor: 'pointer'
-              }}
-            >
-              {buttonTexts[language].autoMove}
-            </button>
+          <div style={{ marginBottom: '20px', display: 'flex', gap: '16px', alignItems: 'center' }}>
+            <div style={{ display: 'flex' }}>
+              <button
+                onClick={() => setLanguage('it')}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '4px 0 0 4px',
+                  border: '1px solid #666',
+                  backgroundColor: language === 'it' ? 'white' : '#4a5568',
+                  color: language === 'it' ? '#1a202c' : 'white',
+                  cursor: 'pointer',
+                  fontSize: '18px'
+                }}
+              >
+                {buttonTexts[language].italian}
+              </button>
+              <button
+                onClick={() => setLanguage('en')}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '0 4px 4px 0',
+                  border: '1px solid #666',
+                  borderLeft: 'none',
+                  backgroundColor: language === 'en' ? 'white' : '#4a5568',
+                  color: language === 'en' ? '#1a202c' : 'white',
+                  cursor: 'pointer',
+                  fontSize: '18px'
+                }}
+              >
+                {buttonTexts[language].english}
+              </button>
+            </div>
+            <div style={{ display: 'flex' }}>
+              <button
+                onClick={() => setBoardOrientation(prev => prev === 'white' ? 'black' : 'white')}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '4px 0 0 4px',
+                  border: '1px solid #666',
+                  backgroundColor: '#4a5568',
+                  color: 'white',
+                  cursor: 'pointer',
+                  fontSize: '18px'
+                }}
+              >
+                {buttonTexts[language].rotateBoard}
+              </button>
+              <button
+                onClick={() => setAutoMove(prev => !prev)}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '0',
+                  border: '1px solid #666',
+                  borderLeft: 'none',
+                  backgroundColor: autoMove ? '#22c55e' : '#4a5568',
+                  color: 'white',
+                  cursor: 'pointer',
+                  fontSize: '18px'
+                }}
+              >
+                {buttonTexts[language].autoMove}
+              </button>
+              <button
+                onClick={makeBestMove}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '0 4px 4px 0',
+                  border: '1px solid #666',
+                  borderLeft: 'none',
+                  backgroundColor: bestMove ? '#22c55e' : '#4a5568',
+                  color: 'white',
+                  cursor: 'pointer',
+                  fontSize: '18px'
+                }}
+                disabled={!bestMove}
+              >
+                {buttonTexts[language].makeBestMove}
+              </button>
+            </div>
           </div>
           <h1>Scacchiera</h1>
           <div className="chessboard-container">
@@ -297,23 +326,6 @@ function App() {
           <div>
             <h2>Mossa migliore</h2>
             <pre>{bestMove || 'In analisi...'}</pre>
-
-            <button
-              onClick={makeBestMove}
-              style={{
-                padding: '8px 16px',
-                borderRadius: '4px',
-                border: '1px solid #666',
-                backgroundColor: bestMove ? '#22c55e' : '#4a5568',
-                color: 'white',
-                cursor: 'pointer',
-                marginTop: '8px'
-              }}
-              disabled={!bestMove}
-            >
-              {buttonTexts[language].makeBestMove}
-            </button>
-
           </div>
           <div>
             <h2>FEN attuale</h2>
