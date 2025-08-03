@@ -85,7 +85,7 @@ function App() {
     engineRef.current.postMessage('stop')
     engineRef.current.postMessage('setoption name MultiPV value 1')
     engineRef.current.postMessage('position fen ' + fen)
-    engineRef.current.postMessage('go depth 15')
+    engineRef.current.postMessage('go depth 20')
   }
 
   const makeBestMove = () => {
