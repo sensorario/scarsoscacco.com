@@ -13,6 +13,7 @@ function App() {
   const [bestMove, setBestMove] = useState<string>('')
   const [isThinking, setIsThinking] = useState(false)
   const [currentMoveIndex, setCurrentMoveIndex] = useState(-1)
+  const [autoMove, setAutoMove] = useState(false)
   const engineRef = useRef<Worker | null>(null)
 
   useEffect(() => {
@@ -40,6 +41,7 @@ function App() {
           const move = e.data.split(' ')[1]
           if (move) {
             setBestMove(move)
+            setIsThinking(false)
           }
         }
       }
@@ -90,11 +92,24 @@ function App() {
     }
   }
 
+  // Effect for auto move functionality
+  useEffect(() => {
+    if (autoMove && bestMove && !isThinking && game.turn() === 'b') {
+      // Automatically make the best move for black after a short delay
+      const timer = setTimeout(() => {
+        makeBestMove()
+      }, 1000) // 1 second delay
+
+      return () => clearTimeout(timer)
+    }
+  }, [bestMove, autoMove, isThinking, game.turn()])
+
   const onPieceDrop = ({ sourceSquare, targetSquare }: { sourceSquare: string; targetSquare: string | null; }) => {
     if (!targetSquare) return false
     const move = game.move({ from: sourceSquare, to: targetSquare, promotion: 'q' })
     if (move) {
       setFen(game.fen())
+      setCurrentMoveIndex(game.history().length - 1)
       setIsThinking(false)
       return true
     }
@@ -174,11 +189,13 @@ function App() {
   const buttonTexts = {
     it: {
       rotateBoard: 'Ruota scacchiera',
-      makeBestMove: 'Fai la mossa migliore'
+      makeBestMove: 'Fai la mossa migliore',
+      autoMove: 'Auto mossa'
     },
     en: {
       rotateBoard: 'Rotate board',
-      makeBestMove: 'Make best move'
+      makeBestMove: 'Make best move',
+      autoMove: 'Auto move'
     }
   }
 
@@ -239,6 +256,19 @@ function App() {
               }}
             >
               {buttonTexts[language].rotateBoard}
+            </button>
+            <button
+              onClick={() => setAutoMove(prev => !prev)}
+              style={{
+                padding: '8px 16px',
+                borderRadius: '4px',
+                border: '1px solid #666',
+                backgroundColor: autoMove ? '#22c55e' : '#4a5568',
+                color: 'white',
+                cursor: 'pointer'
+              }}
+            >
+              {buttonTexts[language].autoMove}
             </button>
           </div>
           <h1>Scacchiera</h1>
