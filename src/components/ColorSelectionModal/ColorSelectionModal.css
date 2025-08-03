@@ -1,0 +1,89 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #2d3748;
+  border-radius: 8px;
+  padding: 32px;
+  text-align: center;
+  border: 2px solid #666;
+  max-width: 400px;
+  width: 90%;
+}
+
+.modal-content h2 {
+  color: white;
+  margin-bottom: 16px;
+  font-size: 24px;
+}
+
+.modal-content p {
+  color: #cbd5e0;
+  margin-bottom: 24px;
+  font-size: 16px;
+}
+
+.color-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.color-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px;
+  border: 2px solid #666;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 16px;
+  font-weight: bold;
+  min-width: 140px;
+}
+
+.white-button {
+  background-color: #f7fafc;
+  color: #1a202c;
+}
+
+.white-button:hover {
+  background-color: #edf2f7;
+  border-color: #4299e1;
+}
+
+.black-button {
+  background-color: #1a202c;
+  color: #f7fafc;
+}
+
+.black-button:hover {
+  background-color: #2d3748;
+  border-color: #4299e1;
+}
+
+.piece-icon {
+  font-size: 32px;
+}
+
+@media (max-width: 480px) {
+  .color-buttons {
+    flex-direction: column;
+  }
+  
+  .color-button {
+    min-width: 200px;
+  }
+}

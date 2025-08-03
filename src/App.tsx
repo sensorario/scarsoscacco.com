@@ -6,10 +6,13 @@ import ChessboardContainer from './components/ChessboardContainer/ChessboardCont
 import EvaluationBar from './components/EvaluationBar/EvaluationBar'
 import PgnContainer from './components/PgnContainer/PgnContainer'
 import FenContainer from './components/FenContainer/FenContainer'
+import ColorSelectionModal from './components/ColorSelectionModal/ColorSelectionModal'
 
 function App() {
   const [language, setLanguage] = useState<'it' | 'en'>('it')
   const [boardOrientation, setBoardOrientation] = useState<'white' | 'black'>('white')
+  const [userColor, setUserColor] = useState<'white' | 'black' | null>(null)
+  const [showColorModal, setShowColorModal] = useState(true)
 
   const [game] = useState(new Chess())
   const [fen, setFen] = useState(game.fen())
@@ -17,7 +20,7 @@ function App() {
   const [bestMove, setBestMove] = useState<string>('')
   const [isThinking, setIsThinking] = useState(false)
   const [currentMoveIndex, setCurrentMoveIndex] = useState(-1)
-  const [autoMove, setAutoMove] = useState(false)
+  const [autoMove, setAutoMove] = useState(true)
   const engineRef = useRef<Worker | null>(null)
 
   useEffect(() => {
@@ -98,15 +101,19 @@ function App() {
 
   // Effect for auto move functionality
   useEffect(() => {
-    if (autoMove && bestMove && !isThinking && game.turn() === 'b') {
-      // Automatically make the best move for black after a short delay
-      const timer = setTimeout(() => {
-        makeBestMove()
-      }, 0) // 1 second delay
+    if (autoMove && bestMove && !isThinking && userColor) {
+      const opponentColor = userColor === 'white' ? 'b' : 'w'
 
-      return () => clearTimeout(timer)
+      if (game.turn() === opponentColor) {
+        // Automatically make the best move for the opponent after a short delay
+        const timer = setTimeout(() => {
+          makeBestMove()
+        }, 1000) // 1 second delay
+
+        return () => clearTimeout(timer)
+      }
     }
-  }, [bestMove, autoMove, isThinking, game.turn()])
+  }, [bestMove, autoMove, isThinking, userColor, game.turn()])
 
   const onPieceDrop = ({ sourceSquare, targetSquare }: { sourceSquare: string; targetSquare: string | null; }) => {
     if (!targetSquare) return false
@@ -217,8 +224,19 @@ function App() {
     }).join('')
   }
 
+  const handleColorSelection = (color: 'white' | 'black') => {
+    setUserColor(color)
+    setBoardOrientation(color)
+    setShowColorModal(false)
+  }
+
   return (
     <>
+      <ColorSelectionModal
+        isOpen={showColorModal}
+        onColorSelect={handleColorSelection}
+      />
+
       <div className="app-container">
         <div className="main-content">
           <NavigationBar
@@ -251,10 +269,7 @@ function App() {
             translateMove={translateMove}
           />
 
-          <div>
-            <h2>FEN attuale</h2>
-            <pre style={{ wordWrap: 'break-word' }}>{fen}</pre>
-          </div>
+          <FenContainer fen={fen} />
         </div>
       </div>
     </>
