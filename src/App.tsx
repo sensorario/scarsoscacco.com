@@ -5,6 +5,7 @@ import NavigationBar from './components/NavigationBar/NavigationBar'
 import ChessboardContainer from './components/ChessboardContainer/ChessboardContainer'
 import EvaluationBar from './components/EvaluationBar/EvaluationBar'
 import PgnContainer from './components/PgnContainer/PgnContainer'
+import FenContainer from './components/FenContainer/FenContainer'
 
 function App() {
   const [language, setLanguage] = useState<'it' | 'en'>('it')
@@ -253,10 +254,7 @@ function App() {
             translateMove={translateMove}
           />
 
-          <div>
-            <h2>FEN attuale</h2>
-            <pre style={{ wordWrap: 'break-word' }}>{fen}</pre>
-          </div>
+          <FenContainer fen={fen} />
         </div>
       </div>
     </>
