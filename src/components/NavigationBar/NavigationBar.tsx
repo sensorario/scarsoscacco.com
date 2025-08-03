@@ -9,6 +9,8 @@ interface NavigationBarProps {
     setAutoMove: (autoMove: boolean | ((prev: boolean) => boolean)) => void
     makeBestMove: () => void
     bestMove: string
+    fenVisible: boolean
+    setFenVisible: (visible: boolean | ((prev: boolean) => boolean)) => void
     buttonTexts: {
         it: { rotateBoard: string; makeBestMove: string; autoMove: string; italian: string; english: string }
         en: { rotateBoard: string; makeBestMove: string; autoMove: string; italian: string; english: string }
@@ -24,6 +26,8 @@ export default function NavigationBar({
     setAutoMove,
     makeBestMove,
     bestMove,
+    fenVisible,
+    setFenVisible,
     buttonTexts
 }: NavigationBarProps) {
     return (
@@ -62,6 +66,13 @@ export default function NavigationBar({
                         disabled={!bestMove}
                     >
                         {buttonTexts[language].makeBestMove}
+                    </button>
+                    <button
+                        onClick={() => setFenVisible(prev => !prev)}
+                        className={`nav-button action-button ${fenVisible ? 'active' : ''}`}
+                        title={fenVisible ? "Hide FEN" : "Show FEN"}
+                    >
+                        {fenVisible ? '◉' : '○'}
                     </button>
                 </div>
             </div>

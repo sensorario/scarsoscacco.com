@@ -18,14 +18,14 @@ export default function ColorSelectionModal({ isOpen, onColorSelect }: ColorSele
                         className="color-button white-button"
                         onClick={() => onColorSelect('white')}
                     >
-                        <span className="piece-icon">♔</span>
+                        <span className="piece-icon">♕</span>
                         <span>Play as White</span>
                     </button>
                     <button
                         className="color-button black-button"
                         onClick={() => onColorSelect('black')}
                     >
-                        <span className="piece-icon">♚</span>
+                        <span className="piece-icon">♛</span>
                         <span>Play as Black</span>
                     </button>
                 </div>

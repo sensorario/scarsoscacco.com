@@ -13,6 +13,7 @@ function App() {
   const [boardOrientation, setBoardOrientation] = useState<'white' | 'black'>('white')
   const [userColor, setUserColor] = useState<'white' | 'black' | null>(null)
   const [showColorModal, setShowColorModal] = useState(true)
+  const [fenVisible, setFenVisible] = useState(false)
 
   const [game] = useState(new Chess())
   const [fen, setFen] = useState(game.fen())
@@ -201,16 +202,16 @@ function App() {
 
   const buttonTexts = {
     it: {
-      rotateBoard: '🔄',
-      makeBestMove: '🎯',
-      autoMove: '🤖',
+      rotateBoard: '↻',
+      makeBestMove: '→',
+      autoMove: '⚡',
       italian: '🇮🇹',
       english: '🇬🇧'
     },
     en: {
-      rotateBoard: '🔄',
-      makeBestMove: '🎯',
-      autoMove: '🤖',
+      rotateBoard: '↻',
+      makeBestMove: '→',
+      autoMove: '⚡',
       italian: '🇮🇹',
       english: '🇬🇧'
     }
@@ -248,6 +249,8 @@ function App() {
             setAutoMove={setAutoMove}
             makeBestMove={makeBestMove}
             bestMove={bestMove}
+            fenVisible={fenVisible}
+            setFenVisible={setFenVisible}
             buttonTexts={buttonTexts}
           />
 
@@ -269,7 +272,7 @@ function App() {
             translateMove={translateMove}
           />
 
-          <FenContainer fen={fen} />
+          <FenContainer fen={fen} isVisible={fenVisible} />
         </div>
       </div>
     </>

@@ -4,7 +4,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(255, 255, 255, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -12,25 +12,32 @@
 }
 
 .modal-content {
-  background-color: #2d3748;
-  border-radius: 8px;
-  padding: 32px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 40px;
   text-align: center;
-  border: 2px solid #666;
-  max-width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  max-width: 480px;
   width: 90%;
+  border: 1px solid #e6e6e6;
 }
 
 .modal-content h2 {
-  color: white;
-  margin-bottom: 16px;
-  font-size: 24px;
+  color: #000000;
+  margin-bottom: 8px;
+  font-size: 28px;
+  font-weight: 600;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  line-height: 1.25;
 }
 
 .modal-content p {
-  color: #cbd5e0;
-  margin-bottom: 24px;
+  color: #666666;
+  margin-bottom: 32px;
   font-size: 16px;
+  font-weight: 400;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  line-height: 1.5;
 }
 
 .color-buttons {
@@ -43,47 +50,58 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 20px;
-  border: 2px solid #666;
+  gap: 12px;
+  padding: 24px 20px;
+  border: 2px solid #e6e6e6;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease-in-out;
   font-size: 16px;
-  font-weight: bold;
-  min-width: 140px;
+  font-weight: 600;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  min-width: 160px;
+  background-color: #ffffff;
+}
+
+.color-button:hover {
+  border-color: #0a66c2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
 }
 
 .white-button {
-  background-color: #f7fafc;
-  color: #1a202c;
-}
-
-.white-button:hover {
-  background-color: #edf2f7;
-  border-color: #4299e1;
+  color: #000000;
 }
 
 .black-button {
-  background-color: #1a202c;
-  color: #f7fafc;
-}
-
-.black-button:hover {
-  background-color: #2d3748;
-  border-color: #4299e1;
+  color: #000000;
 }
 
 .piece-icon {
-  font-size: 32px;
+  font-size: 36px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
 @media (max-width: 480px) {
+  .modal-content {
+    padding: 32px 24px;
+  }
+  
   .color-buttons {
     flex-direction: column;
+    gap: 12px;
   }
   
   .color-button {
-    min-width: 200px;
+    min-width: 100%;
+    padding: 20px;
+  }
+  
+  .modal-content h2 {
+    font-size: 24px;
+  }
+  
+  .modal-content p {
+    font-size: 14px;
   }
 }

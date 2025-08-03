@@ -18,29 +18,18 @@ export default function EvaluationBar({ evaluation }: EvaluationBarProps) {
 
     return (
         <div className="evaluation-bar">
-            <div className="evaluation-bar-container">
-                <div
-                    className="evaluation-white"
-                    style={{ width: `${whitePercentage}%` }}
-                />
-                <div
-                    className="evaluation-black"
-                    style={{ width: `${100 - whitePercentage}%` }}
-                />
-                <div
-                    className="evaluation-text"
-                    style={{
-                        color: whitePercentage > 50 ? 'black' : 'white',
-                        textShadow: whitePercentage > 50 ? '1px 1px 2px white' : '1px 1px 2px black'
-                    }}
-                >
-                    {evaluation || '0'}
+            <div className="evaluation-header">
+                <span className="evaluation-value">{evaluation || '0'}</span>
+                <div className="evaluation-bar-container">
+                    <div
+                        className="evaluation-white"
+                        style={{ width: `${whitePercentage}%` }}
+                    />
+                    <div
+                        className="evaluation-black"
+                        style={{ width: `${100 - whitePercentage}%` }}
+                    />
                 </div>
-            </div>
-            <div className="evaluation-labels">
-                <span>Black Advantage</span>
-                <span>Equal</span>
-                <span>White Advantage</span>
             </div>
         </div>
     )

@@ -16,7 +16,6 @@ export default function PgnContainer({
 }: PgnContainerProps) {
     return (
         <div className='pgn-container'>
-            <h2>PGN attuale</h2>
             <div className="pgn-moves">
                 {game.history().reduce((pairs: any[], move: string, index: number) => {
                     if (index % 2 === 0) {

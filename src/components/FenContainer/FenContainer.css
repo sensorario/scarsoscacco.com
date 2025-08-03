@@ -50,3 +50,43 @@
     outline: none;
     border-color: #4299e1;
 }
+
+.fen-buttons {
+    display: flex;
+    gap: 0;
+    align-items: center;
+}
+
+.fen-button {
+    background-color: #4a5568;
+    color: white;
+    border: 1px solid #666;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+
+.fen-button:first-child {
+    border-radius: 4px 0 0 4px;
+}
+
+.fen-button:last-child {
+    border-radius: 0 4px 4px 0;
+}
+
+.fen-button:only-child {
+    border-radius: 4px;
+}
+
+.fen-button:not(:first-child) {
+    border-left: none;
+}
+
+.fen-button:hover {
+    background-color: #2d3748;
+}
+
+.fen-button:active {
+    background-color: #1a202c;
+}

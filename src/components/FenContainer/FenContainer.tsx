@@ -1,6 +1,11 @@
 import './FenContainer.css';
 
-export default function FenContainer({ fen }: { fen: string }) {
+interface FenContainerProps {
+    fen: string;
+    isVisible: boolean;
+}
+
+export default function FenContainer({ fen, isVisible }: FenContainerProps) {
     const copyToClipboard = () => {
         navigator.clipboard.writeText(fen).then(() => {
             console.log('FEN copied to clipboard');
@@ -9,21 +14,23 @@ export default function FenContainer({ fen }: { fen: string }) {
         });
     };
 
+    if (!isVisible) return null;
+
     return <div className="fen-container">
         <div className="fen-header">
             <h2>FEN attuale</h2>
-            <button 
+            <button
                 onClick={copyToClipboard}
-                className="copy-button"
+                className="fen-button"
                 title="Copy FEN to clipboard"
             >
-                📋
+                ⧉
             </button>
         </div>
-        <input 
-            type="text" 
-            value={fen} 
-            readOnly 
+        <input
+            type="text"
+            value={fen}
+            readOnly
             className="fen-input"
         />
     </div>
