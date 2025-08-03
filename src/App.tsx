@@ -218,37 +218,46 @@ function App() {
   }
 
   return (
-    <div>
-      <NavigationBar
-        language={language}
-        setLanguage={setLanguage}
-        boardOrientation={boardOrientation}
-        setBoardOrientation={setBoardOrientation}
-        autoMove={autoMove}
-        setAutoMove={setAutoMove}
-        makeBestMove={makeBestMove}
-        bestMove={bestMove}
-        buttonTexts={buttonTexts}
-      />
+    <>
+      <div className="app-container">
+        <div className="main-content">
+          <NavigationBar
+            language={language}
+            setLanguage={setLanguage}
+            boardOrientation={boardOrientation}
+            setBoardOrientation={setBoardOrientation}
+            autoMove={autoMove}
+            setAutoMove={setAutoMove}
+            makeBestMove={makeBestMove}
+            bestMove={bestMove}
+            buttonTexts={buttonTexts}
+          />
 
-      <ChessboardContainer
-        bestMove={bestMove}
-        fen={fen}
-        onPieceDrop={onPieceDrop}
-        boardOrientation={boardOrientation}
-      />
+          <ChessboardContainer
+            bestMove={bestMove}
+            fen={fen}
+            onPieceDrop={onPieceDrop}
+            boardOrientation={boardOrientation}
+          />
 
-      <EvaluationBar evaluation={evaluation} />
+          <EvaluationBar evaluation={evaluation} />
+        </div>
 
-      <PgnContainer
-        game={game}
-        currentMoveIndex={currentMoveIndex}
-        onMoveClick={onMoveClick}
-        translateMove={translateMove}
-      />
+        <div className="side-content">
+          <PgnContainer
+            game={game}
+            currentMoveIndex={currentMoveIndex}
+            onMoveClick={onMoveClick}
+            translateMove={translateMove}
+          />
 
-      <FenContainer fen={fen} />
-    </div>
+          <div>
+            <h2>FEN attuale</h2>
+            <pre style={{ wordWrap: 'break-word' }}>{fen}</pre>
+          </div>
+        </div>
+      </div>
+    </>
   )
 }
 

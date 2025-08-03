@@ -9,3 +9,67 @@ body {
   width: 400px;   
     height: 400px;
 }
+
+.app-container {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.main-content {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.side-content {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+/* Tablet layout */
+@media (max-width: 1024px) {
+  .app-container {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+  }
+  
+  .main-content {
+    flex: none;
+  }
+  
+  .side-content {
+    flex: none;
+  }
+}
+
+/* Mobile layout */
+@media (max-width: 768px) {
+  .app-container {
+    gap: 10px;
+    padding: 10px;
+  }
+  
+  .main-content {
+    gap: 15px;
+  }
+  
+  .side-content {
+    gap: 15px;
+  }
+}
+
+/* Extra small mobile */
+@media (max-width: 440px) {
+  .app-container {
+    justify-content: center;
+    align-items: center;
+  }
+}
