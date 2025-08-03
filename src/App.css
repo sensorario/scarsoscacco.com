@@ -1,6 +1,10 @@
 #root {
 }
 
+body {
+  justify-content: center;
+}
+
 .chessboard-container {
   width: 400px;   
     height: 400px;

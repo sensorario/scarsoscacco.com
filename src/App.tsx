@@ -218,46 +218,37 @@ function App() {
   }
 
   return (
-    <>
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap: '20px',
-        padding: '20px',
-      }}>
-        <div>
-          <NavigationBar
-            language={language}
-            setLanguage={setLanguage}
-            boardOrientation={boardOrientation}
-            setBoardOrientation={setBoardOrientation}
-            autoMove={autoMove}
-            setAutoMove={setAutoMove}
-            makeBestMove={makeBestMove}
-            bestMove={bestMove}
-            buttonTexts={buttonTexts}
-          />
+    <div>
+      <NavigationBar
+        language={language}
+        setLanguage={setLanguage}
+        boardOrientation={boardOrientation}
+        setBoardOrientation={setBoardOrientation}
+        autoMove={autoMove}
+        setAutoMove={setAutoMove}
+        makeBestMove={makeBestMove}
+        bestMove={bestMove}
+        buttonTexts={buttonTexts}
+      />
 
-          <ChessboardContainer
-            bestMove={bestMove}
-            fen={fen}
-            onPieceDrop={onPieceDrop}
-            boardOrientation={boardOrientation}
-          />
+      <ChessboardContainer
+        bestMove={bestMove}
+        fen={fen}
+        onPieceDrop={onPieceDrop}
+        boardOrientation={boardOrientation}
+      />
 
-          <EvaluationBar evaluation={evaluation} />
+      <EvaluationBar evaluation={evaluation} />
 
-          <PgnContainer
-            game={game}
-            currentMoveIndex={currentMoveIndex}
-            onMoveClick={onMoveClick}
-            translateMove={translateMove}
-          />
+      <PgnContainer
+        game={game}
+        currentMoveIndex={currentMoveIndex}
+        onMoveClick={onMoveClick}
+        translateMove={translateMove}
+      />
 
-          <FenContainer fen={fen} />
-        </div>
-      </div>
-    </>
+      <FenContainer fen={fen} />
+    </div>
   )
 }
 
