@@ -91,6 +91,11 @@
     background-color: #1a202c;
 }
 
+.fen-button:disabled {
+    opacity: 0.8;
+    cursor: not-allowed;
+}
+
 @keyframes spin {
   from {
     transform: rotate(0deg);
@@ -104,11 +109,6 @@
     display: inline-block;
     animation: spin 0.5s linear;
     color: #22c55e;
-}
-
-.fen-button:disabled {
-    opacity: 0.8;
-    cursor: not-allowed;
 }
 }
 

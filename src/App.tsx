@@ -10,9 +10,9 @@ import ColorSelectionModal from './components/ColorSelectionModal/ColorSelection
 import LogMessage from './components/LogMessage/LogMessage'
 
 function App() {
-  const [language, setLanguage] = useState<'it' | 'en'>('it')
+  const [language, setLanguage] = useState<'it' | 'en'>('en')
   const [boardOrientation, setBoardOrientation] = useState<'white' | 'black'>('white')
-  const [userColor, setUserColor] = useState<'white' | 'black' | null>(null)
+  const [userColor, setUserColor] = useState<'white' | 'black' | 'auto' | null>(null)
   const [showColorModal, setShowColorModal] = useState(true)
   const [fenVisible, setFenVisible] = useState(false)
   const [helpVisible, setHelpVisible] = useState(false)
@@ -105,7 +105,14 @@ function App() {
 
   // Effect for auto move functionality
   useEffect(() => {
-    if (autoMove && bestMove && !isThinking && userColor) {
+    if (userColor === 'auto' && bestMove && !isThinking) {
+      // In auto mode, always make the best move after a delay
+      const timer = setTimeout(() => {
+        makeBestMove()
+      }, 1500) // 1.5 second delay for better visibility
+
+      return () => clearTimeout(timer)
+    } else if (autoMove && bestMove && !isThinking && userColor && userColor !== 'auto') {
       const opponentColor = userColor === 'white' ? 'b' : 'w'
 
       if (game.turn() === opponentColor) {
@@ -228,9 +235,16 @@ function App() {
     }).join('')
   }
 
-  const handleColorSelection = (color: 'white' | 'black') => {
+  const handleColorSelection = (color: 'white' | 'black' | 'auto') => {
     setUserColor(color)
-    setBoardOrientation(color)
+    
+    if (color === 'auto') {
+      setBoardOrientation('white') // Default orientation for auto mode
+      setAutoMove(true) // Enable auto move for computer vs computer
+    } else {
+      setBoardOrientation(color)
+    }
+    
     setShowColorModal(false)
   }
 
@@ -247,6 +261,7 @@ function App() {
       <ColorSelectionModal
         isOpen={showColorModal}
         onColorSelect={handleColorSelection}
+        language={language}
       />
 
       <div className="app-container">

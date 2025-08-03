@@ -1,5 +1,6 @@
 .pgn-container {
-  width: 300px;
+  margin-top: 20px;
+  width: 100%;
 }
 
 .pgn-moves {

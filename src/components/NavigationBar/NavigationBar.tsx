@@ -25,7 +25,6 @@ interface NavigationBarProps {
 export default function NavigationBar({
     language,
     setLanguage,
-    boardOrientation,
     setBoardOrientation,
     autoMove,
     setAutoMove,

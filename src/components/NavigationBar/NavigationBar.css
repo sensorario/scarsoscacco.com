@@ -1,3 +1,7 @@
+.navigation-bar {
+  margin-bottom: 20px;
+}
+
 .navigation-controls {
   display: flex;
   gap: 16px;
