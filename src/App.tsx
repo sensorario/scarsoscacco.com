@@ -234,7 +234,8 @@ function App() {
         borderRadius: '4px',
         overflow: 'hidden',
         display: 'flex',
-        marginTop: '10px'
+        marginTop: '10px',
+        position: 'relative'
       }}>
         <div
           style={{
@@ -250,6 +251,22 @@ function App() {
             transition: 'width 0.3s ease'
           }}
         />
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '12px',
+          fontWeight: 'bold',
+          color: whitePercentage > 50 ? 'black' : 'white',
+          textShadow: whitePercentage > 50 ? '1px 1px 2px white' : '1px 1px 2px black'
+        }}>
+          {evaluation || '0'}
+        </div>
       </div>
     )
   }
