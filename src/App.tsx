@@ -10,6 +10,7 @@ import ColorSelectionModal from './components/ColorSelectionModal/ColorSelection
 import LogMessage from './components/LogMessage/LogMessage'
 import PgnFileLoader from './components/PgnFileLoader/PgnFileLoader'
 import CapturedPieces from './components/CapturedPieces/CapturedPieces'
+import OpeningSelector from './components/OpeningSelector/OpeningSelector'
 
 function App() {
   const [language, setLanguage] = useState<'it' | 'en'>('en')
@@ -20,6 +21,7 @@ function App() {
   const [helpVisible, setHelpVisible] = useState(false)
   const [logMessage, setLogMessage] = useState('')
   const [pgnFileLoaderVisible, setPgnFileLoaderVisible] = useState(false)
+  const [openingSelectorVisible, setOpeningSelectorVisible] = useState(false)
 
   const [game] = useState(() => {
     // Load game state from localStorage
@@ -361,6 +363,10 @@ function App() {
     setPgnFileLoaderVisible(false)
   }
 
+  const handleCloseOpeningSelector = () => {
+    setOpeningSelectorVisible(false)
+  }
+
   const handleResetGame = () => {
     if (confirm('Are you sure you want to reset the game and clear all saved data?')) {
       // Clear localStorage
@@ -409,6 +415,13 @@ function App() {
         onClose={handleClosePgnFileLoader}
       />
 
+      <OpeningSelector
+        onLoadOpening={handleLoadPgn}
+        language={language}
+        isOpen={openingSelectorVisible}
+        onClose={handleCloseOpeningSelector}
+      />
+
       <div className="app-container">
         <div className="main-content">
           <NavigationBar
@@ -430,6 +443,8 @@ function App() {
             buttonTexts={buttonTexts}
             pgnFileLoaderVisible={pgnFileLoaderVisible}
             setPgnFileLoaderVisible={setPgnFileLoaderVisible}
+            openingSelectorVisible={openingSelectorVisible}
+            setOpeningSelectorVisible={setOpeningSelectorVisible}
             onResetGame={handleResetGame}
           />
 

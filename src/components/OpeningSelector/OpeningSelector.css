@@ -1,0 +1,144 @@
+.opening-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.opening-modal-content {
+  background-color: #2d3748;
+  border-radius: 12px;
+  padding: 32px;
+  border: 1px solid #666;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.opening-modal-content h3 {
+  color: white;
+  margin-bottom: 24px;
+  font-size: 20px;
+  text-align: center;
+}
+
+.opening-list {
+  max-height: 400px;
+  overflow-y: auto;
+  margin-bottom: 24px;
+  border: 1px solid #666;
+  border-radius: 6px;
+}
+
+.opening-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid #4a5568;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.opening-item:last-child {
+  border-bottom: none;
+}
+
+.opening-item:hover {
+  background-color: #4a5568;
+}
+
+.opening-item.selected {
+  background-color: #4299e1;
+  color: white;
+}
+
+.opening-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: white;
+}
+
+.opening-item.selected .opening-name {
+  color: white;
+}
+
+.opening-moves {
+  font-family: monospace;
+  font-size: 12px;
+  color: #cbd5e0;
+  opacity: 0.8;
+}
+
+.opening-item.selected .opening-moves {
+  color: white;
+  opacity: 1;
+}
+
+.opening-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.opening-button {
+  padding: 10px 20px;
+  border: 1px solid #666;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.load-button {
+  background-color: #22c55e;
+  color: white;
+}
+
+.load-button:hover:not(:disabled) {
+  background-color: #16a34a;
+  transform: translateY(-1px);
+}
+
+.load-button:disabled {
+  background-color: #4a5568;
+  color: #a0a0a0;
+  cursor: not-allowed;
+}
+
+.cancel-button {
+  background-color: #6b7280;
+  color: white;
+}
+
+.cancel-button:hover {
+  background-color: #4b5563;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 480px) {
+  .opening-modal-content {
+    padding: 24px 20px;
+  }
+  
+  .opening-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .opening-button {
+    width: 100%;
+  }
+  
+  .opening-item {
+    padding: 10px 12px;
+  }
+}

@@ -23,6 +23,8 @@ interface NavigationBarProps {
     pgnFileLoaderVisible: boolean
     setPgnFileLoaderVisible: (visible: boolean | ((prev: boolean) => boolean)) => void
     onResetGame: () => void
+    openingSelectorVisible: boolean
+    setOpeningSelectorVisible: (visible: boolean | ((prev: boolean) => boolean)) => void
 }
 
 export default function NavigationBar({
@@ -43,7 +45,9 @@ export default function NavigationBar({
     buttonTexts,
     pgnFileLoaderVisible,
     setPgnFileLoaderVisible,
-    onResetGame
+    onResetGame,
+    openingSelectorVisible,
+    setOpeningSelectorVisible
 }: NavigationBarProps) {
     const messages = {
         it: {
@@ -53,7 +57,8 @@ export default function NavigationBar({
             fenToggle: 'Mostra/nascondi la notazione FEN della posizione',
             helpToggle: 'Mostra/nascondi i messaggi di aiuto',
             pgnFileLoaderToggle: 'Carica PGN da file',
-            resetGame: 'Ricomincia una nuova partita'
+            resetGame: 'Ricomincia una nuova partita',
+            openingSelector: 'Seleziona apertura'
         },
         en: {
             rotateBoard: 'Rotate the chessboard to change perspective',
@@ -62,7 +67,8 @@ export default function NavigationBar({
             fenToggle: 'Show/hide the FEN notation of the position',
             helpToggle: 'Show/hide help messages',
             pgnFileLoaderToggle: 'Load PGN from file',
-            resetGame: 'Start a new game'
+            resetGame: 'Start a new game',
+            openingSelector: 'Select opening'
         }
     }
 
@@ -146,6 +152,15 @@ export default function NavigationBar({
                         onMouseLeave={onButtonLeave}
                     >
                         🔄
+                    </button>
+                    <button
+                        onClick={() => setOpeningSelectorVisible(true)}
+                        className="nav-button action-button"
+                        title="Select opening"
+                        onMouseEnter={() => onButtonHover(messages[language].openingSelector)}
+                        onMouseLeave={onButtonLeave}
+                    >
+                        📚
                     </button>
                 </div>
             </div>
