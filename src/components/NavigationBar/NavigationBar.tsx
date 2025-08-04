@@ -20,6 +20,9 @@ interface NavigationBarProps {
         it: { rotateBoard: string; makeBestMove: string; autoMove: string; italian: string; english: string }
         en: { rotateBoard: string; makeBestMove: string; autoMove: string; italian: string; english: string }
     }
+    pgnFileLoaderVisible: boolean
+    setPgnFileLoaderVisible: (visible: boolean | ((prev: boolean) => boolean)) => void
+    onResetGame: () => void
 }
 
 export default function NavigationBar({
@@ -37,7 +40,10 @@ export default function NavigationBar({
     setHelpVisible,
     onButtonHover,
     onButtonLeave,
-    buttonTexts
+    buttonTexts,
+    pgnFileLoaderVisible,
+    setPgnFileLoaderVisible,
+    onResetGame
 }: NavigationBarProps) {
     const messages = {
         it: {
@@ -45,14 +51,18 @@ export default function NavigationBar({
             autoMove: 'Attiva/disattiva le mosse automatiche del computer',
             makeBestMove: 'Esegui la mossa migliore suggerita dal computer',
             fenToggle: 'Mostra/nascondi la notazione FEN della posizione',
-            helpToggle: 'Mostra/nascondi i messaggi di aiuto'
+            helpToggle: 'Mostra/nascondi i messaggi di aiuto',
+            pgnFileLoaderToggle: 'Carica PGN da file',
+            resetGame: 'Ricomincia una nuova partita'
         },
         en: {
             rotateBoard: 'Rotate the chessboard to change perspective',
             autoMove: 'Enable/disable automatic computer moves',
             makeBestMove: 'Execute the best move suggested by the computer',
             fenToggle: 'Show/hide the FEN notation of the position',
-            helpToggle: 'Show/hide help messages'
+            helpToggle: 'Show/hide help messages',
+            pgnFileLoaderToggle: 'Load PGN from file',
+            resetGame: 'Start a new game'
         }
     }
 
@@ -118,6 +128,24 @@ export default function NavigationBar({
                         onMouseLeave={onButtonLeave}
                     >
                         ?
+                    </button>
+                    <button
+                        onClick={() => setPgnFileLoaderVisible(true)}
+                        className="nav-button action-button"
+                        title="Load PGN from file"
+                        onMouseEnter={() => onButtonHover(messages[language].pgnFileLoaderToggle)}
+                        onMouseLeave={onButtonLeave}
+                    >
+                        📂
+                    </button>
+                    <button
+                        onClick={onResetGame}
+                        className="nav-button action-button"
+                        title="Reset game"
+                        onMouseEnter={() => onButtonHover(messages[language].resetGame)}
+                        onMouseLeave={onButtonLeave}
+                    >
+                        🔄
                     </button>
                 </div>
             </div>

@@ -8,6 +8,7 @@ import PgnContainer from './components/PgnContainer/PgnContainer'
 import FenContainer from './components/FenContainer/FenContainer'
 import ColorSelectionModal from './components/ColorSelectionModal/ColorSelectionModal'
 import LogMessage from './components/LogMessage/LogMessage'
+import PgnFileLoader from './components/PgnFileLoader/PgnFileLoader'
 
 function App() {
   const [language, setLanguage] = useState<'it' | 'en'>('en')
@@ -17,6 +18,7 @@ function App() {
   const [fenVisible, setFenVisible] = useState(false)
   const [helpVisible, setHelpVisible] = useState(false)
   const [logMessage, setLogMessage] = useState('')
+  const [pgnFileLoaderVisible, setPgnFileLoaderVisible] = useState(false)
 
   const [game] = useState(() => {
     // Load game state from localStorage
@@ -152,6 +154,7 @@ function App() {
     setBestMove('')
     engineRef.current.postMessage('stop')
     engineRef.current.postMessage('setoption name MultiPV value 1')
+    engineRef.current.postMessage('setoption name Skill Level value 1')
     engineRef.current.postMessage('position fen ' + fen)
     engineRef.current.postMessage('go depth 10')
   }
@@ -333,12 +336,76 @@ function App() {
     setLogMessage('')
   }
 
+  const handleLoadPgn = (pgn: string) => {
+    try {
+      const newGame = new Chess()
+      newGame.loadPgn(pgn)
+
+      // Replace the current game with loaded game
+      game.reset()
+      game.loadPgn(pgn)
+
+      setFen(game.fen())
+      setCurrentMoveIndex(game.history().length - 1)
+      localStorage.setItem('chess-game-pgn', game.pgn())
+
+      console.log('PGN loaded successfully')
+    } catch (error) {
+      console.error('Failed to load PGN:', error)
+      alert('Invalid PGN format. Please check your input.')
+    }
+  }
+
+  const handleClosePgnFileLoader = () => {
+    setPgnFileLoaderVisible(false)
+  }
+
+  const handleResetGame = () => {
+    if (confirm('Are you sure you want to reset the game and clear all saved data?')) {
+      // Clear localStorage
+      localStorage.removeItem('chess-game-pgn')
+      localStorage.removeItem('chess-current-move-index')
+      localStorage.removeItem('chess-language')
+      localStorage.removeItem('chess-user-color')
+      localStorage.removeItem('chess-board-orientation')
+      localStorage.removeItem('chess-auto-move')
+      localStorage.removeItem('chess-fen-visible')
+      localStorage.removeItem('chess-help-visible')
+
+      // Reset game state
+      game.reset()
+      setFen(game.fen())
+      setCurrentMoveIndex(-1)
+      setEvaluation('')
+      setBestMove('')
+      setIsThinking(false)
+
+      // Reset UI state
+      setShowColorModal(true)
+      setUserColor(null)
+      setBoardOrientation('white')
+      setAutoMove(true)
+      setFenVisible(false)
+      setHelpVisible(false)
+      setLogMessage('')
+
+      console.log('Game reset successfully')
+    }
+  }
+
   return (
     <>
       <ColorSelectionModal
         isOpen={showColorModal}
         onColorSelect={handleColorSelection}
         language={language}
+      />
+
+      <PgnFileLoader
+        onLoadPgn={handleLoadPgn}
+        language={language}
+        isOpen={pgnFileLoaderVisible}
+        onClose={handleClosePgnFileLoader}
       />
 
       <div className="app-container">
@@ -360,6 +427,9 @@ function App() {
             onButtonHover={handleButtonHover}
             onButtonLeave={handleButtonLeave}
             buttonTexts={buttonTexts}
+            pgnFileLoaderVisible={pgnFileLoaderVisible}
+            setPgnFileLoaderVisible={setPgnFileLoaderVisible}
+            onResetGame={handleResetGame}
           />
 
           <LogMessage message={logMessage} language={language} isVisible={helpVisible} />

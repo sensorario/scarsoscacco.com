@@ -1,0 +1,140 @@
+.pgn-file-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.pgn-file-modal-content {
+  background-color: #2d3748;
+  border-radius: 12px;
+  padding: 32px;
+  border: 1px solid #666;
+  max-width: 500px;
+  width: 90%;
+}
+
+.pgn-file-modal-content h3 {
+  color: white;
+  margin-bottom: 24px;
+  font-size: 20px;
+  text-align: center;
+}
+
+.file-drop-zone {
+  border: 2px dashed #666;
+  border-radius: 8px;
+  padding: 40px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 20px;
+}
+
+.file-drop-zone:hover {
+  border-color: #4299e1;
+  background-color: rgba(66, 153, 225, 0.1);
+}
+
+.drop-zone-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.file-icon {
+  font-size: 48px;
+}
+
+.drop-zone-content p {
+  color: #cbd5e0;
+  margin: 0;
+  font-size: 14px;
+}
+
+.file-input-hidden {
+  display: none;
+}
+
+.selected-file {
+  background-color: #1a202c;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 20px;
+}
+
+.selected-file p {
+  color: #cbd5e0;
+  margin: 0 0 8px 0;
+  font-size: 14px;
+}
+
+.file-name {
+  color: #4299e1;
+  font-weight: 600;
+  font-family: monospace;
+}
+
+.pgn-file-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.pgn-file-button {
+  padding: 10px 20px;
+  border: 1px solid #666;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.load-button {
+  background-color: #22c55e;
+  color: white;
+}
+
+.load-button:hover:not(:disabled) {
+  background-color: #16a34a;
+  transform: translateY(-1px);
+}
+
+.load-button:disabled {
+  background-color: #4a5568;
+  color: #a0a0a0;
+  cursor: not-allowed;
+}
+
+.cancel-button {
+  background-color: #6b7280;
+  color: white;
+}
+
+.cancel-button:hover:not(:disabled) {
+  background-color: #4b5563;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 480px) {
+  .pgn-file-modal-content {
+    padding: 24px 20px;
+  }
+  
+  .pgn-file-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .pgn-file-button {
+    width: 100%;
+  }
+}
