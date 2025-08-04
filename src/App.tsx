@@ -18,14 +18,82 @@ function App() {
   const [helpVisible, setHelpVisible] = useState(false)
   const [logMessage, setLogMessage] = useState('')
 
-  const [game] = useState(new Chess())
+  const [game] = useState(() => {
+    // Load game state from localStorage
+    const savedPgn = localStorage.getItem('chess-game-pgn')
+    const chess = new Chess()
+    if (savedPgn) {
+      try {
+        chess.loadPgn(savedPgn)
+      } catch (error) {
+        console.warn('Failed to load saved game:', error)
+      }
+    }
+    return chess
+  })
+
   const [fen, setFen] = useState(game.fen())
   const [evaluation, setEvaluation] = useState<string>('')
   const [bestMove, setBestMove] = useState<string>('')
   const [isThinking, setIsThinking] = useState(false)
-  const [currentMoveIndex, setCurrentMoveIndex] = useState(-1)
-  const [autoMove, setAutoMove] = useState(true)
+  const [currentMoveIndex, setCurrentMoveIndex] = useState(() => {
+    const savedIndex = localStorage.getItem('chess-current-move-index')
+    return savedIndex ? parseInt(savedIndex) : -1
+  })
+  const [autoMove, setAutoMove] = useState(() => {
+    const savedAutoMove = localStorage.getItem('chess-auto-move')
+    return savedAutoMove ? JSON.parse(savedAutoMove) : true
+  })
   const engineRef = useRef<Worker | null>(null)
+
+  // Load preferences from localStorage on mount
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem('chess-language')
+    const savedUserColor = localStorage.getItem('chess-user-color')
+    const savedBoardOrientation = localStorage.getItem('chess-board-orientation')
+    const savedFenVisible = localStorage.getItem('chess-fen-visible')
+    const savedHelpVisible = localStorage.getItem('chess-help-visible')
+
+    if (savedLanguage) setLanguage(savedLanguage as 'it' | 'en')
+    if (savedUserColor) {
+      setUserColor(savedUserColor as 'white' | 'black' | 'auto')
+      setShowColorModal(false)
+    }
+    if (savedBoardOrientation) setBoardOrientation(savedBoardOrientation as 'white' | 'black')
+    if (savedFenVisible) setFenVisible(JSON.parse(savedFenVisible))
+    if (savedHelpVisible) setHelpVisible(JSON.parse(savedHelpVisible))
+  }, [])
+
+  // Save game state to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('chess-game-pgn', game.pgn())
+    localStorage.setItem('chess-current-move-index', currentMoveIndex.toString())
+  }, [game.history().length, currentMoveIndex])
+
+  // Save preferences to localStorage
+  useEffect(() => {
+    localStorage.setItem('chess-language', language)
+  }, [language])
+
+  useEffect(() => {
+    if (userColor) localStorage.setItem('chess-user-color', userColor)
+  }, [userColor])
+
+  useEffect(() => {
+    localStorage.setItem('chess-board-orientation', boardOrientation)
+  }, [boardOrientation])
+
+  useEffect(() => {
+    localStorage.setItem('chess-auto-move', JSON.stringify(autoMove))
+  }, [autoMove])
+
+  useEffect(() => {
+    localStorage.setItem('chess-fen-visible', JSON.stringify(fenVisible))
+  }, [fenVisible])
+
+  useEffect(() => {
+    localStorage.setItem('chess-help-visible', JSON.stringify(helpVisible))
+  }, [helpVisible])
 
   useEffect(() => {
     engineRef.current = new Worker('/stockfish/stockfish.js')
@@ -85,7 +153,7 @@ function App() {
     engineRef.current.postMessage('stop')
     engineRef.current.postMessage('setoption name MultiPV value 1')
     engineRef.current.postMessage('position fen ' + fen)
-    engineRef.current.postMessage('go depth 20')
+    engineRef.current.postMessage('go depth 10')
   }
 
   const makeBestMove = () => {
@@ -99,7 +167,8 @@ function App() {
     if (move) {
       setFen(game.fen())
       setIsThinking(false)
-      // Delay the move index update to show the move after the piece animation
+      // Save game state after move
+      localStorage.setItem('chess-game-pgn', game.pgn())
       setTimeout(() => {
         setCurrentMoveIndex(game.history().length - 1)
       }, 300)
@@ -135,7 +204,8 @@ function App() {
     if (move) {
       setFen(game.fen())
       setIsThinking(false)
-      // Delay the move index update to show the move after the piece animation
+      // Save game state after move
+      localStorage.setItem('chess-game-pgn', game.pgn())
       setTimeout(() => {
         setCurrentMoveIndex(game.history().length - 1)
       }, 300)
@@ -243,10 +313,11 @@ function App() {
 
   const handleColorSelection = (color: 'white' | 'black' | 'auto') => {
     setUserColor(color)
+    localStorage.setItem('chess-user-color', color)
 
     if (color === 'auto') {
-      setBoardOrientation('white') // Default orientation for auto mode
-      setAutoMove(true) // Enable auto move for computer vs computer
+      setBoardOrientation('white')
+      setAutoMove(true)
     } else {
       setBoardOrientation(color)
     }
