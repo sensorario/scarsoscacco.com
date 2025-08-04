@@ -40,6 +40,7 @@ function App() {
   const [fen, setFen] = useState(game.fen())
   const [evaluation, setEvaluation] = useState<string>('')
   const [bestMove, setBestMove] = useState<string>('')
+  const [bestMoves, setBestMoves] = useState<string[]>([])
   const [isThinking, setIsThinking] = useState(false)
   const [currentMoveIndex, setCurrentMoveIndex] = useState(() => {
     const savedIndex = localStorage.getItem('chess-current-move-index')
@@ -121,6 +122,19 @@ function App() {
             setEvaluation(score > 0 ? `+${score}` : score.toString())
           }
         }
+        if (e.data.includes('multipv')) {
+          // Extract moves from MultiPV lines
+          const pvMatch = e.data.match(/multipv (\d+).*?pv ([a-h][1-8][a-h][1-8][qrbn]?)/);
+          if (pvMatch) {
+            const move = pvMatch[2];
+            setBestMoves(prev => {
+              const newMoves = [...prev];
+              const pvIndex = parseInt(pvMatch[1]) - 1;
+              newMoves[pvIndex] = move;
+              return newMoves.slice(0, 3); // Keep only top 3 moves
+            });
+          }
+        }
         if (e.data.startsWith('bestmove')) {
           const move = e.data.split(' ')[1]
           if (move) {
@@ -155,8 +169,9 @@ function App() {
     if (!engineRef.current) return
     setIsThinking(true)
     setBestMove('')
+    setBestMoves([])
     engineRef.current.postMessage('stop')
-    engineRef.current.postMessage('setoption name MultiPV value 1')
+    engineRef.current.postMessage('setoption name MultiPV value 3')
     engineRef.current.postMessage('setoption name Skill Level value 1')
     engineRef.current.postMessage('position fen ' + fen)
     engineRef.current.postMessage('go depth 10')
@@ -458,6 +473,7 @@ function App() {
 
           <ChessboardContainer
             bestMove={bestMove}
+            bestMoves={bestMoves}
             fen={fen}
             onPieceDrop={onPieceDrop}
             boardOrientation={boardOrientation}
