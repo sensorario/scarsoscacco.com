@@ -435,10 +435,10 @@ function App() {
 
           <LogMessage message={logMessage} language={language} isVisible={helpVisible} />
 
-          <CapturedPieces 
-            game={game} 
-            position="top" 
-            color={boardOrientation === 'white' ? 'black' : 'white'} 
+          <CapturedPieces
+            game={game}
+            position="top"
+            color={boardOrientation === 'white' ? 'black' : 'white'}
           />
 
           <ChessboardContainer
@@ -448,10 +448,10 @@ function App() {
             boardOrientation={boardOrientation}
           />
 
-          <CapturedPieces 
-            game={game} 
-            position="bottom" 
-            color={boardOrientation} 
+          <CapturedPieces
+            game={game}
+            position="bottom"
+            color={boardOrientation}
           />
 
           <EvaluationBar evaluation={evaluation} />
