@@ -9,6 +9,7 @@ import FenContainer from './components/FenContainer/FenContainer'
 import ColorSelectionModal from './components/ColorSelectionModal/ColorSelectionModal'
 import LogMessage from './components/LogMessage/LogMessage'
 import PgnFileLoader from './components/PgnFileLoader/PgnFileLoader'
+import CapturedPieces from './components/CapturedPieces/CapturedPieces'
 
 function App() {
   const [language, setLanguage] = useState<'it' | 'en'>('en')
@@ -434,11 +435,23 @@ function App() {
 
           <LogMessage message={logMessage} language={language} isVisible={helpVisible} />
 
+          <CapturedPieces 
+            game={game} 
+            position="top" 
+            color={boardOrientation === 'white' ? 'black' : 'white'} 
+          />
+
           <ChessboardContainer
             bestMove={bestMove}
             fen={fen}
             onPieceDrop={onPieceDrop}
             boardOrientation={boardOrientation}
+          />
+
+          <CapturedPieces 
+            game={game} 
+            position="bottom" 
+            color={boardOrientation} 
           />
 
           <EvaluationBar evaluation={evaluation} />
