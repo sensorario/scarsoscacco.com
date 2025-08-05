@@ -75,24 +75,24 @@ export default function NavigationBar({
     const getButtonText = (key: string) => {
         const texts = {
             it: {
-                rotateBoard: 'Ruota',
-                autoMove: 'Auto',
-                makeBestMove: isThinking ? 'Pensando...' : 'Mossa',
-                fenToggle: fenVisible ? 'Nascondi FEN' : 'Mostra FEN',
-                helpToggle: helpVisible ? 'Nascondi Aiuto' : 'Mostra Aiuto',
-                pgnFileLoaderToggle: 'Carica PGN',
-                resetGame: 'Reset',
-                openingSelector: 'Aperture'
+                rotateBoard: '↻',
+                autoMove: '⚡',
+                makeBestMove: isThinking ? '⟳' : '→',
+                fenToggle: fenVisible ? '◉' : '○',
+                helpToggle: '?',
+                pgnFileLoaderToggle: '📁',
+                resetGame: '↺',
+                openingSelector: '📖'
             },
             en: {
-                rotateBoard: 'Rotate',
-                autoMove: 'Auto',
-                makeBestMove: isThinking ? 'Thinking...' : 'Move',
-                fenToggle: 'fen',
+                rotateBoard: '↻',
+                autoMove: '⚡',
+                makeBestMove: isThinking ? '⟳' : '→',
+                fenToggle: fenVisible ? '◉' : '○',
                 helpToggle: '?',
-                pgnFileLoaderToggle: 'PGN',
-                resetGame: 'Reset',
-                openingSelector: 'Openings'
+                pgnFileLoaderToggle: '📁',
+                resetGame: '↺',
+                openingSelector: '📖'
             }
         }
         return texts[language][key as keyof typeof texts[typeof language]]
