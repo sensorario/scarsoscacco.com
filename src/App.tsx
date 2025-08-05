@@ -171,10 +171,10 @@ function App() {
     // Configure Stockfish to play at the weakest level possible
     engineRef.current.postMessage('setoption name Skill Level value 0')
     engineRef.current.postMessage('setoption name UCI_LimitStrength value true')
-    engineRef.current.postMessage('setoption name UCI_Elo value 100')
-    engineRef.current.postMessage('setoption name MultiPV value 1')
+    engineRef.current.postMessage('setoption name UCI_Elo value 0')
+    engineRef.current.postMessage('setoption name MultiPV value 0')
     engineRef.current.postMessage('setoption name Contempt value -100')
-    engineRef.current.postMessage('setoption name Move Overhead value 1000')
+    engineRef.current.postMessage('setoption name Move Overhead value -100')
     engineRef.current.postMessage('setoption name Minimum Thinking Time value 1')
   }
 
