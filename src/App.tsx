@@ -165,18 +165,28 @@ function App() {
     }
   }, [fen])
 
+  const configureStockfishAsWeakPlayer = () => {
+    if (!engineRef.current) return
+
+    // Configure Stockfish to play at the weakest level possible
+    engineRef.current.postMessage('setoption name Skill Level value 0')
+    engineRef.current.postMessage('setoption name UCI_LimitStrength value true')
+    engineRef.current.postMessage('setoption name UCI_Elo value 100')
+    engineRef.current.postMessage('setoption name MultiPV value 1')
+    engineRef.current.postMessage('setoption name Contempt value -100')
+    engineRef.current.postMessage('setoption name Move Overhead value 1000')
+    engineRef.current.postMessage('setoption name Minimum Thinking Time value 1')
+  }
+
   const analyzePosition = () => {
     if (!engineRef.current) return
     setIsThinking(true)
     setBestMove('')
     setBestMoves([])
     engineRef.current.postMessage('stop')
-    engineRef.current.postMessage('setoption name MultiPV value 1')
-    engineRef.current.postMessage('setoption name Skill Level value 0')
-    engineRef.current.postMessage('setoption name UCI_LimitStrength value true')
-    engineRef.current.postMessage('setoption name UCI_Elo value 100')
+    configureStockfishAsWeakPlayer()
     engineRef.current.postMessage('position fen ' + fen)
-    engineRef.current.postMessage('go depth 1 movetime 100')
+    engineRef.current.postMessage('go depth 1 movetime 10')
   }
 
   const makeBestMove = () => {
