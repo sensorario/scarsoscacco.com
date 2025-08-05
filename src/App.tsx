@@ -39,6 +39,7 @@ function App() {
 
   const [fen, setFen] = useState(game.fen())
   const [evaluation, setEvaluation] = useState<number>(0)
+  const [mateIn, setMateIn] = useState<number | null>(null)
   const [bestMove, setBestMove] = useState<string>('')
   const [bestMoves, setBestMoves] = useState<string[]>([])
   const [isThinking, setIsThinking] = useState(false)
@@ -123,12 +124,14 @@ function App() {
             // 0 = black advantage, 50 = equal, 100 = white advantage
             const evaluation = 100 / (1 + Math.exp(-0.00368208 * cp))
             setEvaluation(evaluation)
+            setMateIn(null) // Clear mate when we have a regular evaluation
           }
         }
         if (e.data.includes('score mate')) {
           const match = e.data.match(/score mate ([-\d]+)/)
           if (match) {
             const mate = parseInt(match[1])
+            setMateIn(mate)
             setEvaluation(mate > 0 ? 100 : 0) // Set evaluation to 100 for white mate, 0 for black mate
           }
         } else if (e.data.includes('multipv')) {
@@ -424,6 +427,7 @@ function App() {
       setEvaluation(0)
       setBestMove('')
       setIsThinking(false)
+      setMateIn(null)
 
       // Reset UI state
       setShowColorModal(true)
@@ -569,7 +573,7 @@ function App() {
               surplus={surplus}
             />
 
-            <EvaluationBar evaluation={evaluation} />
+            <EvaluationBar evaluation={evaluation} mateIn={mateIn} boardOrientation={boardOrientation} />
           </div>
 
           <div className="side-content">
