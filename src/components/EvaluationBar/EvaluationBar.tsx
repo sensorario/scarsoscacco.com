@@ -1,25 +1,25 @@
 import './EvaluationBar.css'
 
 interface EvaluationBarProps {
-    evaluation: string
+    evaluation: number
 }
 
 export default function EvaluationBar({ evaluation }: EvaluationBarProps) {
-    const evalNum = parseFloat(evaluation) || 0
-    let whitePercentage
+    const evalNum = evaluation || 50
 
-    if (evalNum >= 5) {
-        whitePercentage = 100
-    } else if (evalNum <= -5) {
-        whitePercentage = 0
-    } else {
-        whitePercentage = 50 + (evalNum * 10)
-    }
+    // Evaluation is already in 0-100 range
+    // 0 = black advantage, 50 = equal, 100 = white advantage
+    const whitePercentage = Math.max(0, Math.min(100, evalNum))
+
+    // Format evaluation for display (convert back to traditional format)
+    const displayEval = evalNum === 50 ? '0.00' :
+        evalNum > 50 ? `+${((evalNum - 50) / 10).toFixed(2)}` :
+            `${((evalNum - 50) / 10).toFixed(2)}`
 
     return (
         <div className="evaluation-bar">
             <div className="evaluation-header">
-                <span className="evaluation-value">{evaluation || '0'}</span>
+                <span className="evaluation-value">{displayEval}</span>
                 <div className="evaluation-bar-container">
                     <div
                         className="evaluation-white"

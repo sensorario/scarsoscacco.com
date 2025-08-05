@@ -38,7 +38,7 @@ function App() {
   })
 
   const [fen, setFen] = useState(game.fen())
-  const [evaluation, setEvaluation] = useState<string>('')
+  const [evaluation, setEvaluation] = useState<number>(0)
   const [bestMove, setBestMove] = useState<string>('')
   const [bestMoves, setBestMoves] = useState<string[]>([])
   const [isThinking, setIsThinking] = useState(false)
@@ -118,11 +118,20 @@ function App() {
         if (e.data.includes('score cp')) {
           const match = e.data.match(/score cp ([-\d]+)/)
           if (match) {
-            const score = parseInt(match[1]) / 100
-            setEvaluation(score * (userColor === 'white' ? 1 : -1))
+            const cp = parseInt(match[1])
+            // Convert centipawns to evaluation (0 to 100 range)
+            // 0 = black advantage, 50 = equal, 100 = white advantage
+            const evaluation = 100 / (1 + Math.exp(-0.00368208 * cp))
+            setEvaluation(evaluation)
           }
         }
-        if (e.data.includes('multipv')) {
+        if (e.data.includes('score mate')) {
+          const match = e.data.match(/score mate ([-\d]+)/)
+          if (match) {
+            const mate = parseInt(match[1])
+            setEvaluation(mate > 0 ? 100 : 0) // Set evaluation to 100 for white mate, 0 for black mate
+          }
+        } else if (e.data.includes('multipv')) {
           // Extract moves from MultiPV lines
           const pvMatch = e.data.match(/multipv (\d+).*?pv ([a-h][1-8][a-h][1-8][qrbn]?)/);
           if (pvMatch) {
@@ -412,7 +421,7 @@ function App() {
       game.reset()
       setFen(game.fen())
       setCurrentMoveIndex(-1)
-      setEvaluation('')
+      setEvaluation(0)
       setBestMove('')
       setIsThinking(false)
 
