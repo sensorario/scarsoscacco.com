@@ -34,7 +34,7 @@ export default function CapturedPieces({ capturedPieces, position, color, amount
                     <span key={index} className="captured-piece">
                         {getPieceSymbol(piece, !isWhite)}
                     </span>
-                ))}  {highest - amount === 0 ? '+' + Math.abs(surplus) : ''}
+                ))}  {highest - amount === 0 ? '+' + Math.abs(surplus) : '-' + Math.abs(surplus)}
             </div>
         </div>
     )
