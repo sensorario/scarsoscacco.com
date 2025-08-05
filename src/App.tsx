@@ -119,7 +119,7 @@ function App() {
           const match = e.data.match(/score cp ([-\d]+)/)
           if (match) {
             const score = parseInt(match[1]) / 100
-            setEvaluation(score > 0 ? `+${score}` : score.toString())
+            setEvaluation(score * (userColor === 'white' ? 1 : -1))
           }
         }
         if (e.data.includes('multipv')) {
