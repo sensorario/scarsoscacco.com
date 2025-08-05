@@ -77,22 +77,22 @@ export default function NavigationBar({
             it: {
                 rotateBoard: '↻',
                 autoMove: '⚡',
-                makeBestMove: isThinking ? '⟳' : '→',
-                fenToggle: fenVisible ? '◉' : '○',
+                makeBestMove: isThinking ? '⟳' : '▶',
+                fenToggle: '◉',
                 helpToggle: '?',
-                pgnFileLoaderToggle: '📁',
+                pgnFileLoaderToggle: '📄',
                 resetGame: '↺',
-                openingSelector: '📖'
+                openingSelector: '📚'
             },
             en: {
                 rotateBoard: '↻',
                 autoMove: '⚡',
-                makeBestMove: isThinking ? '⟳' : '→',
-                fenToggle: fenVisible ? '◉' : '○',
+                makeBestMove: isThinking ? '⟳' : '▶',
+                fenToggle: '◉',
                 helpToggle: '?',
-                pgnFileLoaderToggle: '📁',
+                pgnFileLoaderToggle: '📄',
                 resetGame: '↺',
-                openingSelector: '📖'
+                openingSelector: '📚'
             }
         }
         return texts[language][key as keyof typeof texts[typeof language]]
@@ -121,6 +121,7 @@ export default function NavigationBar({
                         className="nav-button action-button"
                         onMouseEnter={() => onButtonHover(messages[language].rotateBoard)}
                         onMouseLeave={onButtonLeave}
+                        title={messages[language].rotateBoard}
                     >
                         {getButtonText('rotateBoard')}
                     </button>
@@ -129,6 +130,7 @@ export default function NavigationBar({
                         className={`nav-button action-button ${autoMove ? 'active' : ''}`}
                         onMouseEnter={() => onButtonHover(messages[language].autoMove)}
                         onMouseLeave={onButtonLeave}
+                        title={messages[language].autoMove}
                     >
                         {getButtonText('autoMove')}
                     </button>
@@ -137,6 +139,7 @@ export default function NavigationBar({
                         className={`nav-button action-button ${fenVisible ? 'active' : ''}`}
                         onMouseEnter={() => onButtonHover(messages[language].fenToggle)}
                         onMouseLeave={onButtonLeave}
+                        title={messages[language].fenToggle}
                     >
                         {getButtonText('fenToggle')}
                     </button>
@@ -145,6 +148,7 @@ export default function NavigationBar({
                         className={`nav-button action-button ${helpVisible ? 'active' : ''}`}
                         onMouseEnter={() => onButtonHover(messages[language].helpToggle)}
                         onMouseLeave={onButtonLeave}
+                        title={messages[language].helpToggle}
                     >
                         {getButtonText('helpToggle')}
                     </button>
@@ -153,6 +157,7 @@ export default function NavigationBar({
                         className="nav-button action-button"
                         onMouseEnter={() => onButtonHover(messages[language].pgnFileLoaderToggle)}
                         onMouseLeave={onButtonLeave}
+                        title={messages[language].pgnFileLoaderToggle}
                     >
                         {getButtonText('pgnFileLoaderToggle')}
                     </button>
@@ -161,6 +166,7 @@ export default function NavigationBar({
                         className="nav-button action-button"
                         onMouseEnter={() => onButtonHover(messages[language].resetGame)}
                         onMouseLeave={onButtonLeave}
+                        title={messages[language].resetGame}
                     >
                         {getButtonText('resetGame')}
                     </button>
@@ -169,17 +175,9 @@ export default function NavigationBar({
                         className="nav-button action-button"
                         onMouseEnter={() => onButtonHover(messages[language].openingSelector)}
                         onMouseLeave={onButtonLeave}
+                        title={messages[language].openingSelector}
                     >
                         {getButtonText('openingSelector')}
-                    </button>
-                    <button
-                        onClick={makeBestMove}
-                        className={`nav-button action-button ${bestMove ? 'active' : ''}`}
-                        disabled={!bestMove || isThinking}
-                        onMouseEnter={() => onButtonHover(messages[language].makeBestMove)}
-                        onMouseLeave={onButtonLeave}
-                    >
-                        {getButtonText('makeBestMove')}
                     </button>
                 </div>
             </div>
