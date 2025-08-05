@@ -573,7 +573,9 @@ function App() {
               surplus={surplus}
             />
 
-            <EvaluationBar evaluation={evaluation} mateIn={mateIn} boardOrientation={boardOrientation} />
+            <EvaluationBar evaluation={evaluation} mateIn={mateIn}
+              winnerColor={surplus > 0 ? boardOrientation : surplus < 0 ? (boardOrientation === 'white' ? 'black' : 'white') : null}
+            />
           </div>
 
           <div className="side-content">

@@ -3,10 +3,10 @@ import './EvaluationBar.css'
 interface EvaluationBarProps {
     evaluation: number
     mateIn?: number | null
-    boardOrientation: 'white' | 'black'
+    winnerColor: string
 }
 
-export default function EvaluationBar({ evaluation, mateIn, boardOrientation }: EvaluationBarProps) {
+export default function EvaluationBar({ evaluation, mateIn, winnerColor }: EvaluationBarProps) {
     const evalNum = evaluation || 50
 
     // Evaluation is already in 0-100 range
@@ -25,9 +25,12 @@ export default function EvaluationBar({ evaluation, mateIn, boardOrientation }: 
                 `${((evalNum - 50) / 10).toFixed(2)}`
     }
 
-    if (displayEval === 'M0') {
-        if (boardOrientation === 'white') { whitePercentage = 100 } else { whitePercentage = 0 }
+    if (winnerColor === 'white') {
+        whitePercentage = 100
+    } else {
+        whitePercentage = 0
     }
+
 
     return (
         <div className="evaluation-bar">
