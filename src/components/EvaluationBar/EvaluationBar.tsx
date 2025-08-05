@@ -3,7 +3,7 @@ import './EvaluationBar.css'
 interface EvaluationBarProps {
     evaluation: number
     mateIn?: number | null
-    winnerColor: string
+    winnerColor: string | null
 }
 
 export default function EvaluationBar({ evaluation, mateIn, winnerColor }: EvaluationBarProps) {
@@ -25,17 +25,18 @@ export default function EvaluationBar({ evaluation, mateIn, winnerColor }: Evalu
                 `${((evalNum - 50) / 10).toFixed(2)}`
     }
 
-    if (winnerColor === 'white') {
-        whitePercentage = 100
-    } else {
-        whitePercentage = 0
+    if (displayEval === 'M0') {
+        if (winnerColor === 'white') {
+            whitePercentage = 100
+        } else {
+            whitePercentage = 0
+        }
     }
-
 
     return (
         <div className="evaluation-bar">
             <div className="evaluation-header">
-                {displayEval !== 'M0' && <span className="evaluation-value">{displayEval}</span>}
+                <span className="evaluation-value">{displayEval}</span>
                 <div className="evaluation-bar-container">
                     <div
                         className="evaluation-white"

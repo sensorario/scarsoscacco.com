@@ -12,6 +12,10 @@
   overflow-y: auto;
   padding-right: 8px;
   scroll-behavior: smooth;
+  min-width: 200px;
+  background-color: #2d3748;
+  padding: 8px;
+  border-radius: 8px;
 }
 
 .pgn-moves::-webkit-scrollbar {
