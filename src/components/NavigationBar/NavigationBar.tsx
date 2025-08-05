@@ -72,6 +72,32 @@ export default function NavigationBar({
         }
     }
 
+    const getButtonText = (key: string) => {
+        const texts = {
+            it: {
+                rotateBoard: 'Ruota',
+                autoMove: 'Auto',
+                makeBestMove: isThinking ? 'Pensando...' : 'Mossa',
+                fenToggle: fenVisible ? 'Nascondi FEN' : 'Mostra FEN',
+                helpToggle: helpVisible ? 'Nascondi Aiuto' : 'Mostra Aiuto',
+                pgnFileLoaderToggle: 'Carica PGN',
+                resetGame: 'Reset',
+                openingSelector: 'Aperture'
+            },
+            en: {
+                rotateBoard: 'Rotate',
+                autoMove: 'Auto',
+                makeBestMove: isThinking ? 'Thinking...' : 'Move',
+                fenToggle: 'fen',
+                helpToggle: '?',
+                pgnFileLoaderToggle: 'PGN',
+                resetGame: 'Reset',
+                openingSelector: 'Openings'
+            }
+        }
+        return texts[language][key as keyof typeof texts[typeof language]]
+    }
+
     return (
         <div className="navigation-bar">
             <div className="navigation-controls">
@@ -96,7 +122,7 @@ export default function NavigationBar({
                         onMouseEnter={() => onButtonHover(messages[language].rotateBoard)}
                         onMouseLeave={onButtonLeave}
                     >
-                        {buttonTexts[language].rotateBoard}
+                        {getButtonText('rotateBoard')}
                     </button>
                     <button
                         onClick={() => setAutoMove(prev => !prev)}
@@ -104,7 +130,47 @@ export default function NavigationBar({
                         onMouseEnter={() => onButtonHover(messages[language].autoMove)}
                         onMouseLeave={onButtonLeave}
                     >
-                        {buttonTexts[language].autoMove}
+                        {getButtonText('autoMove')}
+                    </button>
+                    <button
+                        onClick={() => setFenVisible(prev => !prev)}
+                        className={`nav-button action-button ${fenVisible ? 'active' : ''}`}
+                        onMouseEnter={() => onButtonHover(messages[language].fenToggle)}
+                        onMouseLeave={onButtonLeave}
+                    >
+                        {getButtonText('fenToggle')}
+                    </button>
+                    <button
+                        onClick={() => setHelpVisible(prev => !prev)}
+                        className={`nav-button action-button ${helpVisible ? 'active' : ''}`}
+                        onMouseEnter={() => onButtonHover(messages[language].helpToggle)}
+                        onMouseLeave={onButtonLeave}
+                    >
+                        {getButtonText('helpToggle')}
+                    </button>
+                    <button
+                        onClick={() => setPgnFileLoaderVisible(true)}
+                        className="nav-button action-button"
+                        onMouseEnter={() => onButtonHover(messages[language].pgnFileLoaderToggle)}
+                        onMouseLeave={onButtonLeave}
+                    >
+                        {getButtonText('pgnFileLoaderToggle')}
+                    </button>
+                    <button
+                        onClick={onResetGame}
+                        className="nav-button action-button"
+                        onMouseEnter={() => onButtonHover(messages[language].resetGame)}
+                        onMouseLeave={onButtonLeave}
+                    >
+                        {getButtonText('resetGame')}
+                    </button>
+                    <button
+                        onClick={() => setOpeningSelectorVisible(true)}
+                        className="nav-button action-button"
+                        onMouseEnter={() => onButtonHover(messages[language].openingSelector)}
+                        onMouseLeave={onButtonLeave}
+                    >
+                        {getButtonText('openingSelector')}
                     </button>
                     <button
                         onClick={makeBestMove}
@@ -113,54 +179,7 @@ export default function NavigationBar({
                         onMouseEnter={() => onButtonHover(messages[language].makeBestMove)}
                         onMouseLeave={onButtonLeave}
                     >
-                        <span className={isThinking ? 'thinking-icon' : ''}>
-                            {buttonTexts[language].makeBestMove}
-                        </span>
-                    </button>
-                    <button
-                        onClick={() => setFenVisible(prev => !prev)}
-                        className={`nav-button action-button ${fenVisible ? 'active' : ''}`}
-                        title={fenVisible ? "Hide FEN" : "Show FEN"}
-                        onMouseEnter={() => onButtonHover(messages[language].fenToggle)}
-                        onMouseLeave={onButtonLeave}
-                    >
-                        {fenVisible ? '◉' : '○'}
-                    </button>
-                    <button
-                        onClick={() => setHelpVisible(prev => !prev)}
-                        className={`nav-button action-button ${helpVisible ? 'active' : ''}`}
-                        title={helpVisible ? "Hide Help" : "Show Help"}
-                        onMouseEnter={() => onButtonHover(messages[language].helpToggle)}
-                        onMouseLeave={onButtonLeave}
-                    >
-                        ?
-                    </button>
-                    <button
-                        onClick={() => setPgnFileLoaderVisible(true)}
-                        className="nav-button action-button"
-                        title="Load PGN from file"
-                        onMouseEnter={() => onButtonHover(messages[language].pgnFileLoaderToggle)}
-                        onMouseLeave={onButtonLeave}
-                    >
-                        📂
-                    </button>
-                    <button
-                        onClick={onResetGame}
-                        className="nav-button action-button"
-                        title="Reset game"
-                        onMouseEnter={() => onButtonHover(messages[language].resetGame)}
-                        onMouseLeave={onButtonLeave}
-                    >
-                        🔄
-                    </button>
-                    <button
-                        onClick={() => setOpeningSelectorVisible(true)}
-                        className="nav-button action-button"
-                        title="Select opening"
-                        onMouseEnter={() => onButtonHover(messages[language].openingSelector)}
-                        onMouseLeave={onButtonLeave}
-                    >
-                        📚
+                        {getButtonText('makeBestMove')}
                     </button>
                 </div>
             </div>

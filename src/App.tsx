@@ -417,6 +417,53 @@ function App() {
     }
   }
 
+
+  const getCapturedPieces = (color: string) => {
+    const history = game.history({ verbose: true })
+    const captured: string[] = []
+
+    history.forEach(move => {
+      if (move.captured) {
+        // If this component shows white captured pieces, show black pieces that were captured
+        const capturedColor = color === 'white' ? 'b' : 'w'
+        if (move.color !== capturedColor) {
+          captured.push(move.captured)
+        }
+      }
+    })
+
+    return captured.sort()
+  }
+
+  // Get the sum of values of captured pieces
+  const pieceValues = {
+    'p': 1,
+    'n': 3,
+    'b': 3,
+    'r': 5,
+    'q': 9,
+    'k': 0 // King is not counted in value
+  }
+
+  const boardOrientationPoints = getCapturedPieces(boardOrientation).reduce((sum, piece) => {
+    const pieceType = piece[0] // Get the type of the piece (e.g., 'p', 'n', etc.)
+    return sum + (pieceValues[pieceType as keyof typeof pieceValues] || 0)
+  }, 0)
+
+  const opponentPoints = getCapturedPieces(boardOrientation === 'white' ? 'black' : 'white').reduce((sum, piece) => {
+    const pieceType = piece[0] // Get the type of the piece (e.g., 'p', 'n', etc.)
+    return sum + (pieceValues[pieceType as keyof typeof pieceValues] || 0)
+  }, 0)
+
+  const highest = boardOrientationPoints > opponentPoints ? boardOrientationPoints : opponentPoints
+
+  const points = {
+    sopra: boardOrientationPoints,
+    sotto: opponentPoints,
+  }
+
+  const surplus = boardOrientationPoints - opponentPoints
+
   return (
     <>
       <ColorSelectionModal
@@ -439,8 +486,10 @@ function App() {
         onClose={handleCloseOpeningSelector}
       />
 
-      <div className="app-container">
-        <div className="main-content">
+      <div className="layout-container">
+
+
+        <div className="nav-content">
           <NavigationBar
             language={language}
             setLanguage={setLanguage}
@@ -464,41 +513,54 @@ function App() {
             setOpeningSelectorVisible={setOpeningSelectorVisible}
             onResetGame={handleResetGame}
           />
-
-          <LogMessage message={logMessage} language={language} isVisible={helpVisible} />
-
-          <CapturedPieces
-            game={game}
-            position="top"
-            color={boardOrientation === 'white' ? 'black' : 'white'}
-          />
-
-          <ChessboardContainer
-            bestMove={bestMove}
-            bestMoves={bestMoves}
-            fen={fen}
-            onPieceDrop={onPieceDrop}
-            boardOrientation={boardOrientation}
-          />
-
-          <CapturedPieces
-            game={game}
-            position="bottom"
-            color={boardOrientation}
-          />
-
-          <EvaluationBar evaluation={evaluation} />
         </div>
 
-        <div className="side-content">
-          <PgnContainer
-            game={game}
-            currentMoveIndex={currentMoveIndex}
-            onMoveClick={onMoveClick}
-            translateMove={translateMove}
-          />
+        <div className="app-container">
+          <div className="main-content">
 
-          <FenContainer fen={fen} isVisible={fenVisible} />
+            <LogMessage message={logMessage} language={language} isVisible={helpVisible} />
+
+            <CapturedPieces
+              capturedPieces={getCapturedPieces(boardOrientation === 'white' ? 'black' : 'white')}
+              game={game}
+              position="top"
+              color={boardOrientation === 'white' ? 'black' : 'white'}
+              amount={points.sotto}
+              highest={highest}
+              surplus={surplus}
+            />
+
+            <ChessboardContainer
+              bestMove={bestMove}
+              bestMoves={bestMoves}
+              fen={fen}
+              onPieceDrop={onPieceDrop}
+              boardOrientation={boardOrientation}
+            />
+
+            <CapturedPieces
+              capturedPieces={getCapturedPieces(boardOrientation)}
+              game={game}
+              position="bottom"
+              color={boardOrientation}
+              amount={points.sopra}
+              highest={highest}
+              surplus={surplus}
+            />
+
+            <EvaluationBar evaluation={evaluation} />
+          </div>
+
+          <div className="side-content">
+            <PgnContainer
+              game={game}
+              currentMoveIndex={currentMoveIndex}
+              onMoveClick={onMoveClick}
+              translateMove={translateMove}
+            />
+
+            <FenContainer fen={fen} isVisible={fenVisible} />
+          </div>
         </div>
       </div>
     </>

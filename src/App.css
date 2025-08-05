@@ -1,8 +1,13 @@
-#root {
-}
-
 body {
   justify-content: center;
+}
+
+.nav-content {
+  margin-top: 20px;
+}
+
+.layout-container {
+  width: 600px;
 }
 
 .chessboard-container {
@@ -25,7 +30,7 @@ body {
 }
 
 .side-content {
-  margin-top: 60px;
+  margin-top: 36px;
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
