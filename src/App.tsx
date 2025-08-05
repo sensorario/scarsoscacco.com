@@ -171,10 +171,12 @@ function App() {
     setBestMove('')
     setBestMoves([])
     engineRef.current.postMessage('stop')
-    engineRef.current.postMessage('setoption name MultiPV value 3')
-    engineRef.current.postMessage('setoption name Skill Level value 1')
+    engineRef.current.postMessage('setoption name MultiPV value 1')
+    engineRef.current.postMessage('setoption name Skill Level value 0')
+    engineRef.current.postMessage('setoption name UCI_LimitStrength value true')
+    engineRef.current.postMessage('setoption name UCI_Elo value 100')
     engineRef.current.postMessage('position fen ' + fen)
-    engineRef.current.postMessage('go depth 10')
+    engineRef.current.postMessage('go depth 1 movetime 100')
   }
 
   const makeBestMove = () => {
