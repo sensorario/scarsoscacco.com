@@ -13,6 +13,7 @@ import CapturedPieces from './components/CapturedPieces/CapturedPieces'
 import OpeningSelector from './components/OpeningSelector/OpeningSelector'
 import GoogleLogin from './components/GoogleLogin/GoogleLogin'
 import { useAccessToken } from './components/GoogleLogin/useAccessToken'
+import { LoggedUser } from './components/LoggedUser/LoggedUset'
 
 function App() {
   const [language, setLanguage] = useState<'it' | 'en'>('en')
@@ -544,6 +545,8 @@ function App() {
           />
         </div>
 
+        <div style={{ marginTop: '20px' }}><LoggedUser /></div>
+
         <div className="app-container">
           <div className="main-content">
 
@@ -593,7 +596,7 @@ function App() {
             <FenContainer fen={fen} isVisible={fenVisible} />
           </div>
         </div>
-      </div>
+      </div >
     </>
   )
 }
