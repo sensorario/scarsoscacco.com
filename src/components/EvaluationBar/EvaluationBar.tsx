@@ -36,7 +36,7 @@ export default function EvaluationBar({ evaluation, mateIn, winnerColor }: Evalu
     return (
         <div className="evaluation-bar">
             <div className="evaluation-header">
-                <span className="evaluation-value">{displayEval}</span>
+                {displayEval !== 'M0' && <span className="evaluation-value">{displayEval}</span>}
                 <div className="evaluation-bar-container">
                     <div
                         className="evaluation-white"

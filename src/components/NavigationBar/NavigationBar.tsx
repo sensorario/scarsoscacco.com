@@ -122,9 +122,7 @@ export default function NavigationBar({
                         onMouseEnter={() => onButtonHover(messages[language].rotateBoard)}
                         onMouseLeave={onButtonLeave}
                         title={messages[language].rotateBoard}
-                    >
-                        {getButtonText('rotateBoard')}
-                    </button>
+                    >rotate</button>
                     <button
                         onClick={() => setAutoMove(prev => !prev)}
                         className={`nav-button action-button ${autoMove ? 'active' : ''}`}
@@ -133,6 +131,16 @@ export default function NavigationBar({
                         title={messages[language].autoMove}
                     >
                         {getButtonText('autoMove')}
+                    </button>
+                    <button
+                        onClick={makeBestMove}
+                        className={`nav-button action-button ${bestMove ? 'active' : ''}`}
+                        disabled={!bestMove || isThinking}
+                        onMouseEnter={() => onButtonHover(messages[language].makeBestMove)}
+                        onMouseLeave={onButtonLeave}
+                        title={messages[language].makeBestMove}
+                    >
+                        {getButtonText('makeBestMove')}
                     </button>
                     <button
                         onClick={() => setFenVisible(prev => !prev)}

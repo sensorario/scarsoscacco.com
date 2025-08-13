@@ -513,7 +513,6 @@ function App() {
 
       <div className="layout-container">
 
-
         <div className="nav-content">
           <NavigationBar
             language={language}
