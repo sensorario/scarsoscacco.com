@@ -16,6 +16,8 @@ interface NavigationBarProps {
     setHelpVisible: (visible: boolean | ((prev: boolean) => boolean)) => void
     bestMovesVisible: boolean
     setBestMovesVisible: (visible: boolean | ((prev: boolean) => boolean)) => void
+    savedGamesVisible: boolean
+    setSavedGamesVisible: (visible: boolean | ((prev: boolean) => boolean)) => void
     onButtonHover: (message: string) => void
     onButtonLeave: () => void
     buttonTexts: {
@@ -45,6 +47,8 @@ export default function NavigationBar({
     setHelpVisible,
     bestMovesVisible,
     setBestMovesVisible,
+    savedGamesVisible,
+    setSavedGamesVisible,
     onButtonHover,
     onButtonLeave,
     buttonTexts,
@@ -61,6 +65,7 @@ export default function NavigationBar({
             fenToggle: 'Mostra/nascondi la notazione FEN della posizione',
             helpToggle: 'Mostra/nascondi i messaggi di aiuto',
             bestMovesToggle: 'Mostra/nascondi le mosse migliori sulla scacchiera',
+            savedGamesToggle: 'Visualizza partite salvate',
             pgnFileLoaderToggle: 'Carica PGN da file',
             resetGame: 'Ricomincia una nuova partita',
             openingSelector: 'Seleziona apertura'
@@ -72,6 +77,7 @@ export default function NavigationBar({
             fenToggle: 'Show/hide the FEN notation of the position',
             helpToggle: 'Show/hide help messages',
             bestMovesToggle: 'Show/hide best moves on the chessboard',
+            savedGamesToggle: 'View saved games',
             pgnFileLoaderToggle: 'Load PGN from file',
             resetGame: 'Start a new game',
             openingSelector: 'Select opening'
@@ -87,6 +93,7 @@ export default function NavigationBar({
                 fenToggle: '◉',
                 helpToggle: '?',
                 bestMovesToggle: '👁',
+                savedGamesToggle: '💾',
                 pgnFileLoaderToggle: '📄',
                 resetGame: '↺',
                 openingSelector: '📚'
@@ -98,6 +105,7 @@ export default function NavigationBar({
                 fenToggle: '◉',
                 helpToggle: '?',
                 bestMovesToggle: '👁',
+                savedGamesToggle: '💾',
                 pgnFileLoaderToggle: '📄',
                 resetGame: '↺',
                 openingSelector: '📚'
@@ -181,6 +189,15 @@ export default function NavigationBar({
                         title={messages[language].bestMovesToggle}
                     >
                         {getButtonText('bestMovesToggle')}
+                    </button>
+                    <button
+                        onClick={() => setSavedGamesVisible(true)}
+                        className="nav-button action-button"
+                        onMouseEnter={() => onButtonHover(messages[language].savedGamesToggle)}
+                        onMouseLeave={onButtonLeave}
+                        title={messages[language].savedGamesToggle}
+                    >
+                        {getButtonText('savedGamesToggle')}
                     </button>
                     <button
                         onClick={() => setPgnFileLoaderVisible(true)}

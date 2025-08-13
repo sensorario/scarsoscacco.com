@@ -16,6 +16,7 @@ import { useAccessToken } from './components/GoogleLogin/useAccessToken'
 import { LoggedUser } from './components/LoggedUser/LoggedUset'
 import { useElo } from './hooks/useElo'
 import { useGameStatus } from './hooks/useGameStatus'
+import SavedGamesModal from './components/SavedGamesModal/SavedGamesModal'
 
 function App() {
   const [language, setLanguage] = useState<'it' | 'en'>('en')
@@ -27,6 +28,7 @@ function App() {
   const [logMessage, setLogMessage] = useState('')
   const [pgnFileLoaderVisible, setPgnFileLoaderVisible] = useState(false)
   const [openingSelectorVisible, setOpeningSelectorVisible] = useState(false)
+  const [savedGamesVisible, setSavedGamesVisible] = useState(false)
   const [bestMovesVisible, setBestMovesVisible] = useState(() => {
     const savedBestMovesVisible = localStorage.getItem('chess-best-moves-visible')
     return savedBestMovesVisible ? JSON.parse(savedBestMovesVisible) : false
@@ -216,6 +218,28 @@ function App() {
     engineRef.current.postMessage('go depth 1 movetime 50')
   }
 
+  const saveCompletedGame = () => {
+    const completedGame = {
+      id: Date.now().toString(),
+      pgn: game.pgn(),
+      date: new Date().toISOString(),
+      result: game.isCheckmate() ? (game.turn() === 'w' ? '0-1' : '1-0') :
+        game.isDraw() ? '1/2-1/2' : '*',
+      userColor: userColor,
+      finalElo: elo
+    }
+
+    const savedGames = JSON.parse(localStorage.getItem('chess-completed-games') || '[]')
+    savedGames.push(completedGame)
+
+    // Keep only the last 50 games to avoid localStorage overflow
+    if (savedGames.length > 50) {
+      savedGames.splice(0, savedGames.length - 50)
+    }
+
+    localStorage.setItem('chess-completed-games', JSON.stringify(savedGames))
+  }
+
   const makeBestMove = () => {
     if (!bestMove) return
 
@@ -233,13 +257,17 @@ function App() {
       const isGameFinished = game.isGameOver()
       setGameFinished(isGameFinished)
 
-      // If game just finished and user won, increment ELO
-      if (!wasGameFinished && isGameFinished && userColor && userColor !== 'auto') {
-        // Check if user won
-        if (game.isCheckmate()) {
-          const winner = game.turn() === 'w' ? 'black' : 'white'
-          if (winner === userColor) {
-            setElo(prevElo => prevElo + 10)
+      // If game just finished, save it and check for ELO increment
+      if (!wasGameFinished && isGameFinished) {
+        saveCompletedGame()
+
+        if (userColor && userColor !== 'auto') {
+          // Check if user won
+          if (game.isCheckmate()) {
+            const winner = game.turn() === 'w' ? 'black' : 'white'
+            if (winner === userColor) {
+              setElo(prevElo => prevElo + 10)
+            }
           }
         }
       }
@@ -287,13 +315,17 @@ function App() {
       const isGameFinished = game.isGameOver()
       setGameFinished(isGameFinished)
 
-      // If game just finished and user won, increment ELO
-      if (!wasGameFinished && isGameFinished && userColor && userColor !== 'auto') {
-        // Check if user won
-        if (game.isCheckmate()) {
-          const winner = game.turn() === 'w' ? 'black' : 'white'
-          if (winner === userColor) {
-            setElo(prevElo => prevElo + 10)
+      // If game just finished, save it and check for ELO increment
+      if (!wasGameFinished && isGameFinished) {
+        saveCompletedGame()
+
+        if (userColor && userColor !== 'auto') {
+          // Check if user won
+          if (game.isCheckmate()) {
+            const winner = game.turn() === 'w' ? 'black' : 'white'
+            if (winner === userColor) {
+              setElo(prevElo => prevElo + 10)
+            }
           }
         }
       }
@@ -455,6 +487,10 @@ function App() {
     setOpeningSelectorVisible(false)
   }
 
+  const handleCloseSavedGames = () => {
+    setSavedGamesVisible(false)
+  }
+
   const handleResetGame = () => {
     // Only ask for confirmation if game is in progress
     const shouldConfirm = gameFinished || confirm('Are you sure you want to reset the game and clear all saved data?')
@@ -568,8 +604,14 @@ function App() {
         onClose={handleCloseOpeningSelector}
       />
 
-      <div className="layout-container">
+      <SavedGamesModal
+        isOpen={savedGamesVisible}
+        onClose={handleCloseSavedGames}
+        onLoadGame={handleLoadPgn}
+        language={language}
+      />
 
+      <div className="layout-container">
         <div className="nav-content">
           <NavigationBar
             language={language}
@@ -587,6 +629,8 @@ function App() {
             setHelpVisible={setHelpVisible}
             bestMovesVisible={bestMovesVisible}
             setBestMovesVisible={setBestMovesVisible}
+            savedGamesVisible={savedGamesVisible}
+            setSavedGamesVisible={setSavedGamesVisible}
             onButtonHover={handleButtonHover}
             onButtonLeave={handleButtonLeave}
             buttonTexts={buttonTexts}
