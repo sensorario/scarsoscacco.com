@@ -14,6 +14,8 @@ interface NavigationBarProps {
     setFenVisible: (visible: boolean | ((prev: boolean) => boolean)) => void
     helpVisible: boolean
     setHelpVisible: (visible: boolean | ((prev: boolean) => boolean)) => void
+    bestMovesVisible: boolean
+    setBestMovesVisible: (visible: boolean | ((prev: boolean) => boolean)) => void
     onButtonHover: (message: string) => void
     onButtonLeave: () => void
     buttonTexts: {
@@ -41,6 +43,8 @@ export default function NavigationBar({
     setFenVisible,
     helpVisible,
     setHelpVisible,
+    bestMovesVisible,
+    setBestMovesVisible,
     onButtonHover,
     onButtonLeave,
     buttonTexts,
@@ -56,6 +60,7 @@ export default function NavigationBar({
             makeBestMove: 'Esegui la mossa migliore suggerita dal computer',
             fenToggle: 'Mostra/nascondi la notazione FEN della posizione',
             helpToggle: 'Mostra/nascondi i messaggi di aiuto',
+            bestMovesToggle: 'Mostra/nascondi le mosse migliori sulla scacchiera',
             pgnFileLoaderToggle: 'Carica PGN da file',
             resetGame: 'Ricomincia una nuova partita',
             openingSelector: 'Seleziona apertura'
@@ -66,6 +71,7 @@ export default function NavigationBar({
             makeBestMove: 'Execute the best move suggested by the computer',
             fenToggle: 'Show/hide the FEN notation of the position',
             helpToggle: 'Show/hide help messages',
+            bestMovesToggle: 'Show/hide best moves on the chessboard',
             pgnFileLoaderToggle: 'Load PGN from file',
             resetGame: 'Start a new game',
             openingSelector: 'Select opening'
@@ -80,6 +86,7 @@ export default function NavigationBar({
                 makeBestMove: isThinking ? '⟳' : '▶',
                 fenToggle: '◉',
                 helpToggle: '?',
+                bestMovesToggle: '👁',
                 pgnFileLoaderToggle: '📄',
                 resetGame: '↺',
                 openingSelector: '📚'
@@ -90,6 +97,7 @@ export default function NavigationBar({
                 makeBestMove: isThinking ? '⟳' : '▶',
                 fenToggle: '◉',
                 helpToggle: '?',
+                bestMovesToggle: '👁',
                 pgnFileLoaderToggle: '📄',
                 resetGame: '↺',
                 openingSelector: '📚'
@@ -125,7 +133,9 @@ export default function NavigationBar({
                         onMouseEnter={() => onButtonHover(messages[language].rotateBoard)}
                         onMouseLeave={onButtonLeave}
                         title={messages[language].rotateBoard}
-                    >rotate</button>
+                    >
+                        {getButtonText('rotateBoard')}
+                    </button>
                     <button
                         onClick={() => setAutoMove(prev => !prev)}
                         className={`nav-button action-button ${autoMove ? 'active' : ''}`}
@@ -162,6 +172,15 @@ export default function NavigationBar({
                         title={messages[language].helpToggle}
                     >
                         {getButtonText('helpToggle')}
+                    </button>
+                    <button
+                        onClick={() => setBestMovesVisible(prev => !prev)}
+                        className={`nav-button action-button ${bestMovesVisible ? 'active' : ''}`}
+                        onMouseEnter={() => onButtonHover(messages[language].bestMovesToggle)}
+                        onMouseLeave={onButtonLeave}
+                        title={messages[language].bestMovesToggle}
+                    >
+                        {getButtonText('bestMovesToggle')}
                     </button>
                     <button
                         onClick={() => setPgnFileLoaderVisible(true)}

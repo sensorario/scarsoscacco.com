@@ -23,10 +23,14 @@ function App() {
   const [userColor, setUserColor] = useState<'white' | 'black' | 'auto' | null>(null)
   const [showColorModal, setShowColorModal] = useState(true)
   const [fenVisible, setFenVisible] = useState(false)
-  const [helpVisible, setHelpVisible] = useState(false)
+  const [helpVisible, setHelpVisible] = useState(true)
   const [logMessage, setLogMessage] = useState('')
   const [pgnFileLoaderVisible, setPgnFileLoaderVisible] = useState(false)
   const [openingSelectorVisible, setOpeningSelectorVisible] = useState(false)
+  const [bestMovesVisible, setBestMovesVisible] = useState(() => {
+    const savedBestMovesVisible = localStorage.getItem('chess-best-moves-visible')
+    return savedBestMovesVisible ? JSON.parse(savedBestMovesVisible) : false
+  })
 
   const [game] = useState(() => {
     // Load game state from localStorage
@@ -108,6 +112,10 @@ function App() {
   useEffect(() => {
     localStorage.setItem('chess-help-visible', JSON.stringify(helpVisible))
   }, [helpVisible])
+
+  useEffect(() => {
+    localStorage.setItem('chess-best-moves-visible', JSON.stringify(bestMovesVisible))
+  }, [bestMovesVisible])
 
   useEffect(() => {
     engineRef.current = new Worker('/stockfish/stockfish.js')
@@ -465,6 +473,7 @@ function App() {
       localStorage.removeItem('chess-fen-visible')
       localStorage.removeItem('chess-help-visible')
       localStorage.removeItem('chess-game-finished')
+      localStorage.removeItem('chess-best-moves-visible')
 
       // Reset game state
       game.reset()
@@ -484,6 +493,7 @@ function App() {
       setFenVisible(false)
       setHelpVisible(false)
       setLogMessage('')
+      setBestMovesVisible(true)
 
       console.log('Game reset successfully')
     }
@@ -578,6 +588,8 @@ function App() {
             setFenVisible={setFenVisible}
             helpVisible={helpVisible}
             setHelpVisible={setHelpVisible}
+            bestMovesVisible={bestMovesVisible}
+            setBestMovesVisible={setBestMovesVisible}
             onButtonHover={handleButtonHover}
             onButtonLeave={handleButtonLeave}
             buttonTexts={buttonTexts}
@@ -612,8 +624,8 @@ function App() {
             />
 
             <ChessboardContainer
-              bestMove={bestMove}
-              bestMoves={bestMoves}
+              bestMove={bestMovesVisible ? bestMove : ''}
+              bestMoves={bestMovesVisible ? bestMoves : []}
               fen={fen}
               onPieceDrop={onPieceDrop}
               boardOrientation={boardOrientation}
