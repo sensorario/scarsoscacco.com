@@ -195,17 +195,14 @@ function App() {
   const configureStockfishAsWeakPlayer = () => {
     if (!engineRef.current) return
 
-    // Configure Stockfish to play as poorly as possible
-    // engineRef.current.postMessage('setoption name Skill Level value 0')
-    // engineRef.current.postMessage('setoption name Contempt value -1000')
-    // engineRef.current.postMessage('setoption name Move Overhead value 3000')
-    // engineRef.current.postMessage('setoption name Slow Mover value 10')
-    // engineRef.current.postMessage('setoption name nodestime value 1')
-    // engineRef.current.postMessage('setoption name Use NNUE value false')
-
+    engineRef.current.postMessage('setoption name Skill Level value 0')
     engineRef.current.postMessage('setoption name UCI_LimitStrength value true')
-    engineRef.current.postMessage(`setoption name UCI_Elo value ${elo}`)
-    engineRef.current.postMessage('setoption name MultiPV value 1')
+    engineRef.current.postMessage('setoption name UCI_Elo value 700')
+    engineRef.current.postMessage('setoption name Contempt value -100')
+    engineRef.current.postMessage('setoption name Move Overhead value 3000')
+    engineRef.current.postMessage('setoption name Slow Mover value 10')
+    engineRef.current.postMessage('setoption name nodestime value 1')
+    engineRef.current.postMessage('setoption name Use NNUE value false')
   }
 
   const analyzePosition = () => {
