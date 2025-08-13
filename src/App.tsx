@@ -11,6 +11,8 @@ import LogMessage from './components/LogMessage/LogMessage'
 import PgnFileLoader from './components/PgnFileLoader/PgnFileLoader'
 import CapturedPieces from './components/CapturedPieces/CapturedPieces'
 import OpeningSelector from './components/OpeningSelector/OpeningSelector'
+import GoogleLogin from './components/GoogleLogin/GoogleLogin'
+import { useAccessToken } from './components/GoogleLogin/useAccessToken'
 
 function App() {
   const [language, setLanguage] = useState<'it' | 'en'>('en')
@@ -487,7 +489,10 @@ function App() {
     sotto: opponentPoints,
   }
 
-  const surplus = boardOrientationPoints - opponentPoints
+  const surplus = boardOrientationPoints - opponentPoints;
+  const at = useAccessToken();
+
+  if (!at) return <GoogleLogin />
 
   return (
     <>
