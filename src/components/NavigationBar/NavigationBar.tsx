@@ -43,10 +43,8 @@ export default function NavigationBar({
     onButtonHover,
     onButtonLeave,
     buttonTexts,
-    pgnFileLoaderVisible,
     setPgnFileLoaderVisible,
     onResetGame,
-    openingSelectorVisible,
     setOpeningSelectorVisible
 }: NavigationBarProps) {
     const messages = {
