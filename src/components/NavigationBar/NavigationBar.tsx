@@ -25,6 +25,7 @@ interface NavigationBarProps {
     onResetGame: () => void
     openingSelectorVisible: boolean
     setOpeningSelectorVisible: (visible: boolean | ((prev: boolean) => boolean)) => void
+    elo: number
 }
 
 export default function NavigationBar({
@@ -45,7 +46,8 @@ export default function NavigationBar({
     buttonTexts,
     setPgnFileLoaderVisible,
     onResetGame,
-    setOpeningSelectorVisible
+    setOpeningSelectorVisible,
+    elo
 }: NavigationBarProps) {
     const messages = {
         it: {
@@ -100,6 +102,9 @@ export default function NavigationBar({
         <div className="navigation-bar">
             <div className="navigation-controls">
                 <div className="button-group">
+                    <span className="elo-display" style={{ padding: '8px', fontWeight: 'bold' }}>
+                        ELO: {elo}
+                    </span>
                     <button
                         onClick={() => setLanguage('it')}
                         className={`nav-button language-button-it ${language === 'it' ? '' : 'inactive'}`}

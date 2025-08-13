@@ -14,6 +14,8 @@ import OpeningSelector from './components/OpeningSelector/OpeningSelector'
 import GoogleLogin from './components/GoogleLogin/GoogleLogin'
 import { useAccessToken } from './components/GoogleLogin/useAccessToken'
 import { LoggedUser } from './components/LoggedUser/LoggedUset'
+import { useElo } from './hooks/useElo'
+import { useGameStatus } from './hooks/useGameStatus'
 
 function App() {
   const [language, setLanguage] = useState<'it' | 'en'>('en')
@@ -55,6 +57,8 @@ function App() {
     return savedAutoMove ? JSON.parse(savedAutoMove) : true
   })
   const engineRef = useRef<Worker | null>(null)
+  const { elo, setElo } = useElo()
+  const { gameFinished, setGameFinished } = useGameStatus()
 
   // Load preferences from localStorage on mount
   useEffect(() => {
@@ -192,7 +196,7 @@ function App() {
     // engineRef.current.postMessage('setoption name Use NNUE value false')
 
     engineRef.current.postMessage('setoption name UCI_LimitStrength value true')
-    engineRef.current.postMessage('setoption name UCI_Elo value 700')
+    engineRef.current.postMessage(`setoption name UCI_Elo value ${elo}`)
     engineRef.current.postMessage('setoption name MultiPV value 1')
   }
 
@@ -218,6 +222,23 @@ function App() {
     if (move) {
       setFen(game.fen())
       setIsThinking(false)
+
+      // Check if game is finished
+      const wasGameFinished = gameFinished
+      const isGameFinished = game.isGameOver()
+      setGameFinished(isGameFinished)
+
+      // If game just finished and user won, increment ELO
+      if (!wasGameFinished && isGameFinished && userColor && userColor !== 'auto') {
+        // Check if user won
+        if (game.isCheckmate()) {
+          const winner = game.turn() === 'w' ? 'black' : 'white'
+          if (winner === userColor) {
+            setElo(prevElo => prevElo + 10)
+          }
+        }
+      }
+
       // Save game state after move
       localStorage.setItem('chess-game-pgn', game.pgn())
       setTimeout(() => {
@@ -255,6 +276,23 @@ function App() {
     if (move) {
       setFen(game.fen())
       setIsThinking(false)
+
+      // Check if game is finished
+      const wasGameFinished = gameFinished
+      const isGameFinished = game.isGameOver()
+      setGameFinished(isGameFinished)
+
+      // If game just finished and user won, increment ELO
+      if (!wasGameFinished && isGameFinished && userColor && userColor !== 'auto') {
+        // Check if user won
+        if (game.isCheckmate()) {
+          const winner = game.turn() === 'w' ? 'black' : 'white'
+          if (winner === userColor) {
+            setElo(prevElo => prevElo + 10)
+          }
+        }
+      }
+
       // Save game state after move
       localStorage.setItem('chess-game-pgn', game.pgn())
       setTimeout(() => {
@@ -413,7 +451,10 @@ function App() {
   }
 
   const handleResetGame = () => {
-    if (confirm('Are you sure you want to reset the game and clear all saved data?')) {
+    // Only ask for confirmation if game is in progress
+    const shouldConfirm = gameFinished || confirm('Are you sure you want to reset the game and clear all saved data?')
+
+    if (shouldConfirm) {
       // Clear localStorage
       localStorage.removeItem('chess-game-pgn')
       localStorage.removeItem('chess-current-move-index')
@@ -423,6 +464,7 @@ function App() {
       localStorage.removeItem('chess-auto-move')
       localStorage.removeItem('chess-fen-visible')
       localStorage.removeItem('chess-help-visible')
+      localStorage.removeItem('chess-game-finished')
 
       // Reset game state
       game.reset()
@@ -432,6 +474,7 @@ function App() {
       setBestMove('')
       setIsThinking(false)
       setMateIn(null)
+      setGameFinished(false)
 
       // Reset UI state
       setShowColorModal(true)
@@ -543,6 +586,7 @@ function App() {
             openingSelectorVisible={openingSelectorVisible}
             setOpeningSelectorVisible={setOpeningSelectorVisible}
             onResetGame={handleResetGame}
+            elo={elo}
           />
         </div>
 
@@ -550,6 +594,10 @@ function App() {
 
         <div className="app-container">
           <div className="main-content">
+
+            <div style={{ padding: '10px', fontWeight: 'bold', textAlign: 'center' }}>
+              Game Status: {gameFinished ? 'FINISHED' : 'IN PROGRESS'}
+            </div>
 
             <LogMessage message={logMessage} language={language} isVisible={helpVisible} />
 
