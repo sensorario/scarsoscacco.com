@@ -47,7 +47,6 @@ export default function NavigationBar({
     setHelpVisible,
     bestMovesVisible,
     setBestMovesVisible,
-    savedGamesVisible,
     setSavedGamesVisible,
     onButtonHover,
     onButtonLeave,
