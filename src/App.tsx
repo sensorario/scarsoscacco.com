@@ -88,6 +88,7 @@ function App() {
   useEffect(() => {
     localStorage.setItem('chess-game-pgn', game.pgn())
     localStorage.setItem('chess-current-move-index', currentMoveIndex.toString())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [game.history().length, currentMoveIndex])
 
   // Save preferences to localStorage
@@ -185,6 +186,7 @@ function App() {
     analyzePosition()
 
     return () => engineRef.current?.terminate()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fen])
 
   // Analizza la posizione iniziale
@@ -192,6 +194,7 @@ function App() {
     if (!isThinking) {
       analyzePosition()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fen])
 
   const configureStockfishAsWeakPlayer = () => {
@@ -301,6 +304,7 @@ function App() {
         return () => clearTimeout(timer)
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bestMove, autoMove, isThinking, userColor, game.turn()])
 
   const onPieceDrop = ({ sourceSquare, targetSquare }: { sourceSquare: string; targetSquare: string | null; }) => {
@@ -368,6 +372,7 @@ function App() {
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentMoveIndex, game])
 
   const onMoveClick = (moveIndex: number | null) => {
