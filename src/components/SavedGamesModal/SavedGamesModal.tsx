@@ -18,13 +18,13 @@ interface SavedGamesModalProps {
 }
 
 export default function SavedGamesModal({ isOpen, onClose, onLoadGame, language }: SavedGamesModalProps) {
-    if (!isOpen) return null
-
-    const savedGames: SavedGame[] = JSON.parse(localStorage.getItem('chess-completed-games') || '[]')
     const [currentPage, setCurrentPage] = useState(0)
+    const savedGames: SavedGame[] = JSON.parse(localStorage.getItem('chess-completed-games') || '[]')
     const itemsPerPage = 1
     const totalPages = Math.ceil(savedGames.length / itemsPerPage)
     const currentGame = savedGames[currentPage]
+
+    if (!isOpen) return null
 
     const texts = {
         it: {
