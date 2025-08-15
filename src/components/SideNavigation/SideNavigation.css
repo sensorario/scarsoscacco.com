@@ -1,0 +1,76 @@
+.side-navigation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #232f3e;
+    color: white;
+    width: 250px;
+    height: 100vh;
+    z-index: 9999;
+}
+
+.side-navigation-menu {
+    padding: 0;
+}
+
+.side-navigation-item {
+    position: relative;
+    padding: 12px 16px;
+    border-bottom: 1px solid #3a4553;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.side-navigation-item:hover {
+    background-color: #3a4553;
+}
+
+.side-navigation-submenu {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    background-color: white;
+    color: black;
+    min-width: 200px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid #ddd;
+    z-index: 1000;
+    animation: slideIn 0.2s ease-out;
+}
+
+.side-navigation-subitem {
+    padding: 10px 16px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.side-navigation-subitem:hover {
+    background-color: #f5f5f5;
+}
+
+.side-navigation-subitem:last-child {
+    border-bottom: none;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .side-navigation {
+        width: 200px;
+    }
+    
+    .side-navigation-submenu {
+        min-width: 180px;
+    }
+}

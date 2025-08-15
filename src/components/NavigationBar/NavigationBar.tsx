@@ -34,7 +34,6 @@ interface NavigationBarProps {
 
 export default function NavigationBar({
     language,
-    setLanguage,
     setBoardOrientation,
     autoMove,
     setAutoMove,
@@ -120,18 +119,6 @@ export default function NavigationBar({
                     <span className="elo-display" style={{ padding: '8px', fontWeight: 'bold' }}>
                         ELO: {elo}
                     </span>
-                    <button
-                        onClick={() => setLanguage('it')}
-                        className={`nav-button language-button-it ${language === 'it' ? '' : 'inactive'}`}
-                    >
-                        {buttonTexts[language].italian}
-                    </button>
-                    <button
-                        onClick={() => setLanguage('en')}
-                        className={`nav-button language-button-en ${language === 'en' ? '' : 'inactive'}`}
-                    >
-                        {buttonTexts[language].english}
-                    </button>
                 </div>
                 <div className="button-group">
                     <button

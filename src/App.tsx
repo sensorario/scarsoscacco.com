@@ -17,6 +17,7 @@ import { LoggedUser } from './components/LoggedUser/LoggedUset'
 import { useElo } from './hooks/useElo'
 import { useGameStatus } from './hooks/useGameStatus'
 import SavedGamesModal from './components/SavedGamesModal/SavedGamesModal'
+import SideNavigation from './components/SideNavigation/SideNavigation'
 
 function App() {
   const [language, setLanguage] = useState<'it' | 'en'>('en')
@@ -589,6 +590,8 @@ function App() {
 
   return (
     <>
+      <SideNavigation setLanguage={setLanguage} />
+
       <ColorSelectionModal
         isOpen={showColorModal}
         onColorSelect={handleColorSelection}
