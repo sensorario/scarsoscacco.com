@@ -498,11 +498,9 @@ function App() {
   }
 
   const handleResetGame = () => {
-    // Only ask for confirmation if game is in progress
     const shouldConfirm = gameFinished || confirm('Are you sure you want to reset the game and clear all saved data?')
 
     if (shouldConfirm) {
-      // Clear localStorage
       localStorage.removeItem('chess-game-pgn')
       localStorage.removeItem('chess-current-move-index')
       localStorage.removeItem('chess-language')
@@ -514,7 +512,6 @@ function App() {
       localStorage.removeItem('chess-game-finished')
       localStorage.removeItem('chess-best-moves-visible')
 
-      // Reset game state
       game.reset()
       setFen(game.fen())
       setCurrentMoveIndex(-1)
@@ -524,7 +521,6 @@ function App() {
       setMateIn(null)
       setGameFinished(false)
 
-      // Reset UI state
       setShowColorModal(true)
       setUserColor(null)
       setBoardOrientation('white')
@@ -539,51 +535,48 @@ function App() {
   }
 
 
-  const getCapturedPieces = (color: string) => {
+  const getCapturedPieces = (color: string, moveIndex?: number) => {
     const history = game.history({ verbose: true })
     const captured: string[] = []
+    const end = typeof moveIndex === 'number' && moveIndex >= 0 ? moveIndex + 1 : history.length
 
-    history.forEach(move => {
-      if (move.captured) {
-        // If this component shows white captured pieces, show black pieces that were captured
+    for (let i = 0; i < end; i++) {
+      const move = history[i]
+      if (move && move.captured) {
         const capturedColor = color === 'white' ? 'b' : 'w'
         if (move.color !== capturedColor) {
           captured.push(move.captured)
         }
       }
-    })
+    }
 
     return captured.sort()
   }
 
-  // Get the sum of values of captured pieces
-  const pieceValues = {
-    'p': 1,
-    'n': 3,
-    'b': 3,
-    'r': 5,
-    'q': 9,
-    'k': 0 // King is not counted in value
+  const getCapturedPoints = (pieces: string[]) => {
+    const pieceValues = {
+      'p': 1,
+      'n': 3,
+      'b': 3,
+      'r': 5,
+      'q': 9,
+      'k': 0
+    }
+
+    return pieces.reduce((sum, piece) => {
+      const pieceType = piece[0]
+      return sum + (pieceValues[pieceType as keyof typeof pieceValues] || 0)
+    }, 0)
   }
 
-  const boardOrientationPoints = getCapturedPieces(boardOrientation).reduce((sum, piece) => {
-    const pieceType = piece[0] // Get the type of the piece (e.g., 'p', 'n', etc.)
-    return sum + (pieceValues[pieceType as keyof typeof pieceValues] || 0)
-  }, 0)
+  const capturedTop = getCapturedPieces(boardOrientation === 'white' ? 'black' : 'white', currentMoveIndex)
+  const capturedBottom = getCapturedPieces(boardOrientation, currentMoveIndex)
+  const pointsTop = getCapturedPoints(capturedTop)
+  const pointsBottom = getCapturedPoints(capturedBottom)
 
-  const opponentPoints = getCapturedPieces(boardOrientation === 'white' ? 'black' : 'white').reduce((sum, piece) => {
-    const pieceType = piece[0] // Get the type of the piece (e.g., 'p', 'n', etc.)
-    return sum + (pieceValues[pieceType as keyof typeof pieceValues] || 0)
-  }, 0)
+  const highest = Math.max(pointsTop, pointsBottom)
+  const surplus = pointsBottom - pointsTop
 
-  const highest = boardOrientationPoints > opponentPoints ? boardOrientationPoints : opponentPoints
-
-  const points = {
-    sopra: boardOrientationPoints,
-    sotto: opponentPoints,
-  }
-
-  const surplus = boardOrientationPoints - opponentPoints;
   const at = useAccessToken();
 
   if (!at) return <GoogleLogin />
@@ -663,11 +656,11 @@ function App() {
             <LogMessage message={logMessage} language={language} isVisible={helpVisible} />
 
             <CapturedPieces
-              capturedPieces={getCapturedPieces(boardOrientation === 'white' ? 'black' : 'white')}
+              capturedPieces={capturedTop}
               game={game}
               position="top"
               color={boardOrientation === 'white' ? 'black' : 'white'}
-              amount={points.sotto}
+              amount={pointsTop}
               highest={highest}
               surplus={surplus}
             />
@@ -681,11 +674,11 @@ function App() {
             />
 
             <CapturedPieces
-              capturedPieces={getCapturedPieces(boardOrientation)}
+              capturedPieces={capturedBottom}
               game={game}
               position="bottom"
               color={boardOrientation}
-              amount={points.sopra}
+              amount={pointsBottom}
               highest={highest}
               surplus={surplus}
             />

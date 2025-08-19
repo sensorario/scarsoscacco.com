@@ -49,7 +49,6 @@ export default function NavigationBar({
     setSavedGamesVisible,
     onButtonHover,
     onButtonLeave,
-    buttonTexts,
     setPgnFileLoaderVisible,
     onResetGame,
     setOpeningSelectorVisible,
